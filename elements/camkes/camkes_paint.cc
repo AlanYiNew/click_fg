@@ -50,11 +50,14 @@ void Camkes_Paint::push(int port, Packet *p)
 { 
     p = simple_action(p);
     
-    
     if (p){
+    
         //camkes proxy
         Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
+        if (((volatile message_t*)_camkes_buf)->ready){
+           p->kill();
+           return;
+        }
         Camkes_config::packet_serialize(dst,p); 
         _camkes_buf->ready = 1;
         p->kill();

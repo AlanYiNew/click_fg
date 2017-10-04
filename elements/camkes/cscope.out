@@ -1,4 +1,4 @@
-cscope 15 /thesis/camkes-rumprun/projects/camkes/apps/click_scratch/elements/camkes               0000052622
+cscope 15 /thesis/camkes-rumprun/projects/camkes/apps/click_fg/elements/camkes               0000067592
 	@camkes_classifier.cc
 
 21 
@@ -1088,8 +1088,12 @@ p
 );
 
 257 ià(
+´oxy_bufãr
+[
 pÜt
- != 1){
+] =ğ
+NULL
+){
 
 258 
 	`checked_ouut_push
@@ -1106,20 +1110,30 @@ d¡
  = 
 »š‹½»t_ÿ¡
 <Pack‘*>(&(
-_ÿmkes_buf
-->
+´oxy_bufãr
+[
+pÜt
+]->
 cÚ‹Á
 ));
 
-261 ((vŞ©
+261 ià(((vŞ©
 mes§ge_t
 *)
-_ÿmkes_buf
-)->
+´oxy_bufãr
+[
+pÜt
+])->
 »ady
-);
+){
 
 262 
+p
+->
+	`kl
+();
+
+265 
 Camkes_cÚfig
 ::
 	`·ck‘_£rŸlize
@@ -1129,47 +1143,59 @@ d¡
 p
 );
 
-263 
-_ÿmkes_buf
-->
+266 
+´oxy_bufãr
+[
+pÜt
+]->
 »ady
  = 1;
 
-264 
+267 
 p
 ->
 	`kl
 ();
 
-266 
+269 
 	}
 }
 
-269 
+274 
 	gCamkes_CÏssif›r
 ::
-	$Camkes_CÏssif›r
+	$£tup_´oxy
 (
 mes§ge_t
- * 
-_ÿmkes_buf
+** 
+bufãrs
+,
+num
 ){
 
-270 
-this
-->
-_ÿmkes_buf
- = _camkes_buf;
+275 
+i
+ = 0 ; i < 
+num
+; ++i){
 
-271 
+276 
+´oxy_bufãr
+[
+i
+] = 
+bufãrs
+[i];
+
+278 
 	}
 }
 
-273 
+280 
 CLICK_ENDDECLS
 
 
-274 
+281 
 	$ELEMENT_REQUIRES
 (
 Alignm’tInfo
@@ -1177,13 +1203,13 @@ Alignm’tInfo
 CÏssifiÿtiÚ
 )
 
-275 
+282 
 	$EXPORT_ELEMENT
 (
 Camkes_CÏssif›r
 )
 
-276 
+283 
 	`ELEMENT_MT_SAFE
 (
 Camkes_CÏssif›r
@@ -1230,12 +1256,6 @@ EËm’t
 (è
 CLICK_COLD
 ;
-
-79 
-	`Camkes_CÏssif›r
-(
-mes§ge_t
-* );
 
 80 cÚ¡ *
 	$şass_Çme
@@ -1339,11 +1359,19 @@ E¼ÜHªdËr
 ”rh
 );
 
-96 
+96 
+	`£tup_´oxy
+(
+mes§ge_t
+** 
+bufãrs
+,);
+
+98 
 ´Ùeùed
 :
 
-98 
+100 
 CÏssifiÿtiÚ
 ::
 WÜdwi£
@@ -1353,7 +1381,7 @@ Prog¿m
 _´og
 ;
 
-100 
+102 
 SŒšg
  
 	`´og¿m_¡ršg
@@ -1361,21 +1389,521 @@ SŒšg
 EËm’t
  *, *);
 
-102 
+105 
 ´iv©e
 :
 
-103 
+106 
 mes§ge_t
 * 
-_ÿmkes_buf
-;
+´oxy_bufãr
+[
+MAX_OUTPUT_NUM
+];
 
-104 
+107 
 	}
 };
 
-106 
+111 
+	gCLICK_ENDDECLS
+
+
+	@camkes_decipttl.cc
+
+19 
+	~<şick/cÚfig.h
+>
+
+20 
+	~"ÿmkes_dec‰l.hh
+"
+
+21 
+	~<şick/glue.hh
+>
+
+22 
+	~<şick/¬gs.hh
+>
+
+23 
+	~<şickÃt/.h
+>
+
+24 
+	~<şick/ÿmkes_cÚfig.hh
+>
+
+25 
+CLICK_DECLS
+
+
+27 
+	gCamkes_DecIPTTL
+::
+	$Camkes_DecIPTTL
+()
+
+28 : 
+	`_aùive
+(
+Œue
+), 
+	$_muÉiÿ¡
+(
+Œue
+)
+
+30 
+_drİs
+ = 0;
+
+31 
+	}
+}
+
+33 
+	gCamkes_DecIPTTL
+::
+	$Camkes_DecIPTTL
+(
+mes§ge_t
+ * 
+buf
+)
+
+34 : 
+	`_aùive
+(
+Œue
+), 
+	`_muÉiÿ¡
+Ñrue),
+	$_ÿmkes_buf
+(
+buf
+)
+
+36 
+_drİs
+ = 0;
+
+37 
+	}
+}
+
+39 
+	gCamkes_DecIPTTL
+::~
+	$Camkes_DecIPTTL
+()
+
+41 
+	}
+}
+
+44 
+Camkes_DecIPTTL
+::
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &
+cÚf
+, 
+E¼ÜHªdËr
+ *
+”rh
+)
+
+46  
+Args
+(
+cÚf
+, 
+this
+, 
+”rh
+)
+
+47 .
+»ad
+("ACTIVE", 
+_aùive
+)
+
+48 .
+»ad
+("MULTICAST", 
+_muÉiÿ¡
+).
+com¶‘e
+();
+
+51 
+Pack‘
+ *
+
+52 
+	gCamkes_DecIPTTL
+::
+	$sim¶e_aùiÚ
+(
+Pack‘
+ *
+p
+)
+
+55 
+	`as£¹
+(
+p
+->
+	`has_ÃtwÜk_h—d”
+());
+
+56 ià(!
+_aùive
+)
+
+57  
+p
+;
+
+58 cÚ¡ 
+şick_
+ *
+_š
+ = 
+p
+->
+	`_h—d”
+();
+
+59 ià(!
+_muÉiÿ¡
+ && 
+	`IPAdd»ss
+(
+_š
+->
+_d¡
+).
+	`is_muÉiÿ¡
+())
+
+60  
+p
+;
+
+63 ià(
+_š
+->
+_‰l
+ <= 1) {
+
+64 ++
+_drİs
+;
+
+66 
+Pack‘
+* 
+d¡
+ = 
+»š‹½»t_ÿ¡
+<Pack‘*>(&(
+_ÿmkes_buf
+->
+cÚ‹Á
+));
+
+67 ià(((vŞ©
+mes§ge_t
+*)
+_ÿmkes_buf
+)->
+»ady
+){
+
+68 
+p
+->
+	`kl
+();
+
+71 
+Camkes_cÚfig
+::
+	`·ck‘_£rŸlize
+(
+d¡
+,
+p
+);
+
+72 
+_ÿmkes_buf
+->
+»ady
+ = 1;
+
+73 
+p
+->
+	`kl
+();
+
+76 
+Wr™abËPack‘
+ *
+q
+ = 
+p
+->
+	`uniqueify
+();
+
+77 ià(!
+q
+)
+
+79 
+şick_
+ *
+
+ = 
+q
+->
+	`_h—d”
+();
+
+80 --
+
+->
+_‰l
+;
+
+89 
+sum
+ = (~
+	`Áohs
+(
+
+->
+_sum
+) & 0xFFFF) + 0xFEFF;
+
+90 
+
+->
+_sum
+ = ~
+	`htÚs
+(
+sum
+ + (sum >> 16));
+
+92  
+q
+;
+
+94 
+	}
+}
+
+97 
+	gCamkes_DecIPTTL
+::
+	$add_hªdËrs
+()
+
+99 
+	`add_d©a_hªdËrs
+("drİs", 
+HªdËr
+::
+OP_READ
+, &
+_drİs
+);
+
+100 
+	`add_d©a_hªdËrs
+("aùive", 
+HªdËr
+::
+OP_READ
+ | HªdËr::
+OP_WRITE
+ | HªdËr::
+CHECKBOX
+, &
+_aùive
+);
+
+101 
+	}
+}
+
+103 
+CLICK_ENDDECLS
+
+
+104 
+	$EXPORT_ELEMENT
+(
+Camkes_DecIPTTL
+)
+
+105 
+	`ELEMENT_MT_SAFE
+(
+Camkes_DecIPTTL
+)
+
+	@camkes_decipttl.hh
+
+1 #iâdeà
+CLICK_DECIPTTL_HH
+
+
+2 
+	#CLICK_DECIPTTL_HH
+
+
+	)
+
+3 
+	~<şick/–em’t.hh
+>
+
+4 
+	~<şick/glue.hh
+>
+
+5 
+	~<şick/©omic.hh
+>
+
+6 
+	~<pÜ‰y³.h
+>
+
+7 
+CLICK_DECLS
+
+
+46 şas 
+	cCamkes_DecIPTTL
+ : 
+public
+ 
+EËm’t
+ {…ublic:
+
+48 
+	$Camkes_DecIPTTL
+(è
+CLICK_COLD
+;
+
+49 ~
+	$Camkes_DecIPTTL
+(è
+CLICK_COLD
+;
+
+50 
+	`Camkes_DecIPTTL
+(
+mes§ge_t
+*);
+
+51 cÚ¡ *
+	$şass_Çme
+() const {  "Camkes_DecIPTTL"; }
+
+52 cÚ¡ *
+	$pÜt_couÁ
+(ècÚ¡ {  
+PORTS_1_1X2
+; 
+	}
+}
+
+53 cÚ¡ *
+	$´oûssšg
+(ècÚ¡ {  
+PROCESSING_A_AH
+; 
+	}
+}
+
+55 
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &
+cÚf
+, 
+E¼ÜHªdËr
+ *
+”rh
+è
+	gCLICK_COLD
+;
+
+56 
+	$add_hªdËrs
+(è
+CLICK_COLD
+;
+
+58 
+Pack‘
+ *
+	`sim¶e_aùiÚ
+(Packet *);
+
+60 
+´iv©e
+:
+
+62 
+©omic_ušt32_t
+ 
+_drİs
+;
+
+63 
+boŞ
+ 
+_aùive
+;
+
+64 
+boŞ
+ 
+_muÉiÿ¡
+;
+
+65 
+mes§ge_t
+ * 
+_ÿmkes_buf
+;
+
+66 
+	}
+};
+
+68 
 	gCLICK_ENDDECLS
 
 
@@ -2944,6 +3472,2016 @@ ušt8_t
 };
 
 141 
+	gCLICK_ENDDECLS
+
+
+	@camkes_ipfragmenter.cc
+
+20 
+	~<şick/cÚfig.h
+>
+
+21 
+	~"ÿmkes_äagm’‹r.hh
+"
+
+22 
+	~<şickÃt/.h
+>
+
+23 
+	~<şick/¬gs.hh
+>
+
+24 
+	~<şick/”rÜ.hh
+>
+
+25 
+	~<şick/glue.hh
+>
+
+26 
+	~<şick/ÿmkes_cÚfig.hh
+>
+
+27 
+CLICK_DECLS
+
+
+29 
+	gCamkes_IPF¿gm’‹r
+::
+	$Camkes_IPF¿gm’‹r
+()
+
+30 : 
+	`_hÚÜ_df
+(
+Œue
+), 
+	`_v”bo£
+(
+çl£
+), 
+	$_mtu
+(0)
+
+32 
+_äagm’ts
+ = 0;
+
+33 
+_drİs
+ = 0;
+
+34 
+	}
+}
+
+36 
+	gCamkes_IPF¿gm’‹r
+::
+	$Camkes_IPF¿gm’‹r
+(
+mes§ge_t
+* 
+buf
+)
+
+37 : 
+	`_hÚÜ_df
+(
+Œue
+), 
+	`_v”bo£
+(
+çl£
+), 
+	`_mtu
+(0), 
+	$_ÿmkes_buf
+(
+buf
+)
+
+39 
+_äagm’ts
+ = 0;
+
+40 
+_drİs
+ = 0;
+
+41 
+	}
+}
+
+44 
+	gCamkes_IPF¿gm’‹r
+::~
+	$Camkes_IPF¿gm’‹r
+()
+
+46 
+	}
+}
+
+50 
+Camkes_IPF¿gm’‹r
+::
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &
+cÚf
+, 
+E¼ÜHªdËr
+ *
+”rh
+)
+
+52 
+	g_h—droom
+ = 
+Pack‘
+::
+deçuÉ_h—droom
+;
+
+53 ià(
+Args
+(
+cÚf
+, 
+this
+, 
+”rh
+)
+
+54 .
+»ad_mp
+("MTU", 
+_mtu
+)
+
+55 .
+»ad_p
+("HONOR_DF", 
+_hÚÜ_df
+)
+
+56 .
+»ad_p
+("VERBOSE", 
+_v”bo£
+)
+
+57 .
+»ad
+("HEADROOM", 
+_h—droom
+)
+
+58 .
+com¶‘e
+() < 0)
+
+60 ià(
+	g_mtu
+ < 8)
+
+61  
+	g”rh
+->
+”rÜ
+("MTU must be‡t†east 8");
+
+66 
+	gCamkes_IPF¿gm’‹r
+::
+	$İtcİy
+(cÚ¡ 
+şick_
+ *
+1
+, click_ *
+2
+)
+
+68 cÚ¡ 
+ušt8_t
+* 
+oš
+ = (cÚ¡ ušt8_t*è(
+1
+ + 1);
+
+69 cÚ¡ 
+ušt8_t
+* 
+oš_’d
+ = 
+oš
+ + (
+1
+->
+_hl
+ << 2è- (
+şick_
+);
+
+70 
+ušt8_t
+ *
+oout
+ = (ušt8_ˆ*è(
+2
+ + 1);
+
+71 
+ouos
+ = 0;
+
+73 
+oš
+ < 
+oš_’d
+)
+
+74 ià(*
+oš
+ =ğ
+IPOPT_NOP
+)
+
+75 ++
+oš
+;
+
+76 ià(*
+oš
+ =ğ
+IPOPT_EOL
+
+
+77 || 
+oš
+ + 1 =ğ
+oš_’d
+
+
+78 || 
+oš
+[1] < 2
+
+79 || 
+oš
+ + oš[1] > 
+oš_’d
+)
+
+82 ià(*
+oš
+ & 0x80) {
+
+83 ià(
+2
+)
+
+84 
+	`memıy
+(
+oout
+ + 
+ouos
+, 
+oš
+, oin[1]);
+
+85 
+ouos
+ +ğ
+oš
+[1];
+
+87 
+oš
+ += oin[1];
+
+90 ; (
+ouos
+ & 3) != 0; outpos++)
+
+91 ià(
+2
+)
+
+92 
+oout
+[
+ouos
+] = 
+IPOPT_EOL
+;
+
+94  
+ouos
+;
+
+95 
+	}
+}
+
+98 
+	gCamkes_IPF¿gm’‹r
+::
+	$äagm’t
+(
+Pack‘
+ *
+p_š
+)
+
+100 cÚ¡ 
+şick_
+ *
+_š
+ = 
+p_š
+->
+	`_h—d”
+();
+
+101 
+hËn
+ = 
+_š
+->
+_hl
+ << 2;
+
+102 
+fœ¡_dËn
+ = (
+_mtu
+ - 
+hËn
+) & ~7;
+
+103 
+š_dËn
+ = 
+	`Áohs
+(
+_š
+->
+_Ën
+è- 
+hËn
+;
+
+108 ià(((
+_š
+->
+_off
+ & 
+	`htÚs
+(
+IP_DF
+)è&& 
+_hÚÜ_df
+è|| 
+fœ¡_dËn
+ < 8) {
+
+109 ià(
+_v”bo£
+ || 
+_drİs
+ < 5)
+
+110 
+	`şick_ch©‹r
+("Camkes_IPF¿gm’‹r(%dèDF %p{_±r} %p{_±r}†’=%d", 
+_mtu
+, &
+_š
+->
+_¤c
+, &_š->
+_d¡
+, 
+p_š
+->
+	`Ëngth
+());
+
+111 
+_drİs
+++;
+
+113 
+Pack‘
+* 
+d¡
+ = 
+»š‹½»t_ÿ¡
+<Pack‘*>(&(
+_ÿmkes_buf
+->
+cÚ‹Á
+));
+
+114 ià(((vŞ©
+mes§ge_t
+*)
+_ÿmkes_buf
+)->
+»ady
+){
+
+115 
+p_š
+->
+	`kl
+();
+
+118 
+Camkes_cÚfig
+::
+	`·ck‘_£rŸlize
+(
+d¡
+,
+p_š
+);
+
+119 
+_ÿmkes_buf
+->
+»ady
+ = 1;
+
+120 
+p_š
+->
+	`kl
+();
+
+126 
+Wr™abËPack‘
+ *
+p
+ = 
+p_š
+->
+	`uniqueify
+();
+
+127 ià(!
+p
+)
+
+129 
+şick_
+ *
+
+ = 
+p
+->
+	`_h—d”
+();
+
+133 ià(
+
+->
+_off
+ & 
+	`htÚs
+(
+IP_DF
+)) {
+
+134 
+
+->
+_id
+ = 
+	`şick_¿ndom
+();
+
+135 
+
+->
+_off
+ &ğ~
+	`htÚs
+(
+IP_DF
+);
+
+137 
+boŞ
+ 
+had_mf
+ = (
+
+->
+_off
+ & 
+	`htÚs
+(
+IP_MF
+)) != 0;
+
+138 
+
+->
+_Ën
+ = 
+	`htÚs
+(
+hËn
+ + 
+fœ¡_dËn
+);
+
+139 
+
+->
+_off
+ |ğ
+	`htÚs
+(
+IP_MF
+);
+
+140 
+
+->
+_sum
+ = 0;
+
+141 
+
+->
+_sum
+ = 
+	`şick_š_cksum
+((cÚ¡ *), 
+hËn
+);
+
+142 
+Pack‘
+ *
+fœ¡_äagm’t
+ = 
+p
+->
+	`şÚe
+();
+
+143 
+fœ¡_äagm’t
+->
+	`ke
+(
+p
+->
+	`Ëngth
+(è-…->
+	`ÃtwÜk_h—d”_off£t
+(è- 
+hËn
+ - 
+fœ¡_dËn
+);
+
+144 
+	`ouut
+(0).
+	`push
+(
+fœ¡_äagm’t
+);
+
+145 
+_äagm’ts
+++;
+
+148 
+out_hËn
+ = (
+şick_
+è+ 
+	`İtcİy
+(
+
+, 0);
+
+150 
+off
+ = 
+fœ¡_dËn
+; ofà< 
+š_dËn
+; ) {
+
+152 
+out_dËn
+ = (
+_mtu
+ - 
+out_hËn
+) & ~7;
+
+153 ià(
+out_dËn
+ + 
+off
+ > 
+š_dËn
+)
+
+154 
+out_dËn
+ = 
+š_dËn
+ - 
+off
+;
+
+156 
+Wr™abËPack‘
+ *
+q
+ = 
+Pack‘
+::
+	`make
+(
+_h—droom
+, 0, 
+out_hËn
+ + 
+out_dËn
+, 0);
+
+157 ià(
+q
+) {
+
+158 
+q
+->
+	`£t_ÃtwÜk_h—d”
+(q->
+	`d©a
+(), 
+out_hËn
+);
+
+159 
+şick_
+ *
+q
+ = 
+q
+->
+	`_h—d”
+();
+
+161 
+	`memıy
+(
+q
+, 
+
+, (
+şick_
+));
+
+162 
+	`İtcİy
+(
+
+, 
+q
+);
+
+163 
+	`memıy
+(
+q
+->
+	`Œª¥Üt_h—d”
+(), 
+p
+->Œª¥Üt_h—d”(è+ 
+off
+, 
+out_dËn
+);
+
+165 
+q
+->
+_hl
+ = 
+out_hËn
+ >> 2;
+
+166 
+q
+->
+_off
+ = 
+	`htÚs
+(
+	`Áohs
+(
+
+->_offè+ (
+off
+ >> 3));
+
+167 ià(
+out_dËn
+ + 
+off
+ >ğ
+š_dËn
+ && !
+had_mf
+)
+
+168 
+q
+->
+_off
+ &ğ~
+	`htÚs
+(
+IP_MF
+);
+
+169 
+q
+->
+_Ën
+ = 
+	`htÚs
+(
+out_hËn
+ + 
+out_dËn
+);
+
+170 
+q
+->
+_sum
+ = 0;
+
+171 
+q
+->
+_sum
+ = 
+	`şick_š_cksum
+((cÚ¡ *)q, 
+out_hËn
+);
+
+173 
+q
+->
+	`cİy_ªnÙ©iÚs
+(
+p
+);
+
+175 
+	`ouut
+(0).
+	`push
+(
+q
+);
+
+176 
+_äagm’ts
+++;
+
+179 
+off
+ +ğ
+out_dËn
+;
+
+182 
+p
+->
+	`kl
+();
+
+183 
+	}
+}
+
+186 
+	gCamkes_IPF¿gm’‹r
+::
+	$push
+(, 
+Pack‘
+ *
+p
+)
+
+189 ià(
+p
+->
+	`ÃtwÜk_Ëngth
+(è<ğ(è
+_mtu
+)
+
+190 
+	`ouut
+(0).
+	`push
+(
+p
+);
+
+192 
+	`äagm’t
+(
+p
+);
+
+193 
+	}
+}
+
+196 
+	gCamkes_IPF¿gm’‹r
+::
+	$add_hªdËrs
+()
+
+198 
+	`add_d©a_hªdËrs
+("drİs", 
+HªdËr
+::
+OP_READ
+, &
+_drİs
+);
+
+199 
+	`add_d©a_hªdËrs
+("äagm’ts", 
+HªdËr
+::
+OP_READ
+, &
+_äagm’ts
+);
+
+200 
+	}
+}
+
+202 
+CLICK_ENDDECLS
+
+
+203 
+	$EXPORT_ELEMENT
+(
+Camkes_IPF¿gm’‹r
+)
+
+204 
+	`ELEMENT_MT_SAFE
+(
+Camkes_IPF¿gm’‹r
+)
+
+	@camkes_ipfragmenter.hh
+
+1 #iâdeà
+CLICK_IPFRAGMENTER_HH
+
+
+2 
+	#CLICK_IPFRAGMENTER_HH
+
+
+	)
+
+3 
+	~<şick/–em’t.hh
+>
+
+4 
+	~<şick/glue.hh
+>
+
+5 
+	~<şick/©omic.hh
+>
+
+6 
+	~<pÜ‰y³.h
+>
+
+7 
+CLICK_DECLS
+
+
+59 şas 
+	cCamkes_IPF¿gm’‹r
+ : 
+public
+ 
+EËm’t
+ {…ublic:
+
+61 
+	$Camkes_IPF¿gm’‹r
+(è
+CLICK_COLD
+;
+
+62 ~
+	$Camkes_IPF¿gm’‹r
+(è
+CLICK_COLD
+;
+
+63 
+	`Camkes_IPF¿gm’‹r
+(
+mes§ge_t
+*);
+
+65 cÚ¡ *
+	$şass_Çme
+() const {  "Camkes_IPFragmenter"; }
+
+66 cÚ¡ *
+	$pÜt_couÁ
+(ècÚ¡ {  
+PORTS_1_1X2
+; 
+	}
+}
+
+67 cÚ¡ *
+	$´oûssšg
+(ècÚ¡ {  
+PUSH
+; 
+	}
+}
+
+68 
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &, 
+E¼ÜHªdËr
+ *è
+	gCLICK_COLD
+;
+
+70 
+ušt32_t
+ 
+	$drİs
+(ècÚ¡ {  
+_drİs
+; 
+	}
+}
+
+71 
+ušt32_t
+ 
+	$äagm’ts
+(ècÚ¡ {  
+_äagm’ts
+; 
+	}
+}
+
+73 
+	$add_hªdËrs
+(è
+CLICK_COLD
+;
+
+75 
+	`push
+(, 
+Pack‘
+ *);
+
+77 
+´iv©e
+:
+
+79 
+boŞ
+ 
+_hÚÜ_df
+;
+
+80 
+boŞ
+ 
+_v”bo£
+;
+
+81 
+_mtu
+;
+
+82 
+_h—droom
+;
+
+83 
+©omic_ušt32_t
+ 
+_drİs
+;
+
+84 
+©omic_ušt32_t
+ 
+_äagm’ts
+;
+
+85 
+mes§ge_t
+* 
+_ÿmkes_buf
+;
+
+87 
+	`äagm’t
+(
+Pack‘
+ *);
+
+88 
+	`İtcİy
+(cÚ¡ 
+şick_
+ *
+1
+, click_ *
+2
+);
+
+90 
+	}
+};
+
+92 
+	gCLICK_ENDDECLS
+
+
+	@camkes_ipgwoptions.cc
+
+20 
+	~<şick/cÚfig.h
+>
+
+21 
+	~"ÿmkes_gwİtiÚs.hh
+"
+
+22 
+	~<şickÃt/.h
+>
+
+23 
+	~<şick/¬gs.hh
+>
+
+24 
+	~<şick/”rÜ.hh
+>
+
+25 
+	~<şick/glue.hh
+>
+
+26 
+	~<şick/·ck‘_ªno.hh
+>
+
+27 
+	~<şick/ÿmkes_cÚfig.hh
+>
+
+28 
+CLICK_DECLS
+
+
+30 
+	gCamkes_IPGWO±iÚs
+::
+	$Camkes_IPGWO±iÚs
+()
+
+32 
+_drİs
+ = 0;
+
+33 
+	}
+}
+
+35 
+	gCamkes_IPGWO±iÚs
+::
+	$Camkes_IPGWO±iÚs
+(
+mes§ge_t
+* 
+buf
+):
+	$_ÿmkes_buf
+(
+buf
+){
+
+36 
+_drİs
+ = 0;
+
+37 
+	}
+}
+
+39 
+	gCamkes_IPGWO±iÚs
+::~
+	$Camkes_IPGWO±iÚs
+()
+
+41 
+	}
+}
+
+44 
+Camkes_IPGWO±iÚs
+::
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &
+cÚf
+, 
+E¼ÜHªdËr
+ *
+”rh
+)
+
+46 ià(
+Args
+(
+cÚf
+, 
+this
+, 
+”rh
+)
+
+47 .
+»ad_mp
+("MYADDR", 
+_´eã¼ed_addr
+)
+
+48 .
+»ad_p
+("OTHERADDRS", 
+_my_addrs
+)
+
+49 .
+com¶‘e
+() < 0)
+
+51 
+	g_my_addrs
+.
+push_back
+(
+_´eã¼ed_addr
+);
+
+55 
+Pack‘
+ *
+
+56 
+	gCamkes_IPGWO±iÚs
+::
+	$hªdË_İtiÚs
+(
+Pack‘
+ *
+p
+)
+
+58 
+Wr™abËPack‘
+ *
+wp
+ = 0;
+
+59 cÚ¡ 
+ušt8_t
+ *
+ß
+ = 
+p
+->
+	`ÃtwÜk_h—d”
+();
+
+60 
+hËn
+ = 
+p
+->
+	`ÃtwÜk_h—d”_Ëngth
+();
+
+62 
+oi
+;
+
+63 
+oi
+ = (
+şick_
+); o˜< 
+hËn
+; ) {
+
+65 
+ty³
+ = 
+ß
+[
+oi
+];
+
+66 ià(
+ty³
+ =ğ
+IPOPT_NOP
+) {
+
+67 
+oi
+++;
+
+69 } ià(
+ty³
+ =ğ
+IPOPT_EOL
+)
+
+74 
+xËn
+ = 
+ß
+[
+oi
+ + 1];
+
+75 ià(
+xËn
+ < 2 || 
+oi
+ + xËÀ> 
+hËn
+) {
+
+77 
+oi
+++;
+
+78 
+£nd_”rÜ
+;
+
+79 } ià(
+ty³
+ !ğ
+IPOPT_RR
+ &&y³ !ğ
+IPOPT_TS
+) {
+
+81 
+oi
+ +ğ
+xËn
+;
+
+86 ià(!
+wp
+) {
+
+87 ià(!(
+wp
+ = 
+p
+->
+	`uniqueify
+()))
+
+89 
+ß
+ = 
+wp
+->
+	`ÃtwÜk_h—d”
+();
+
+91 
+ušt8_t
+ *
+wß
+ = 
+wp
+->
+	`ÃtwÜk_h—d”
+();
+
+93 if(
+ty³
+ =ğ
+IPOPT_RR
+){
+
+98 
+p
+ = 
+ß
+[
+oi
++2] - 1;
+
+99 ià(
+p
+ >ğ3 &&… + 4 <ğ
+xËn
+) {
+
+100 
+	`memıy
+(
+wß
+ + 
+oi
+ + 
+p
+, &
+_´eã¼ed_addr
+, 4);
+
+101 
+wß
+[
+oi
++2] += 4;
+
+102 } ià(
+p
+ !ğ
+xËn
+) {
+
+103 
+oi
+ += 2;
+
+104 
+£nd_”rÜ
+;
+
+106 } if(
+ty³
+ =ğ
+IPOPT_TS
+){
+
+112 
+p
+ = 
+ß
+[
+oi
++2] - 1;
+
+113 
+oæw
+ = 
+ß
+[
+oi
++3] >> 4;
+
+114 
+æg
+ = 
+ß
+[
+oi
++3] & 0xf;
+
+115 
+boŞ
+ 
+ov”æowed
+ = 0;
+
+117 
+Time¡amp
+ 
+now
+ = Time¡amp::
+	`now
+();
+
+118 
+ms
+ = 
+	`htÚl
+((
+now
+.
+	`£c
+(è% 86400)*1000 +‚ow.
+	`m£c
+());
+
+120 if(
+p
+ < 4){
+
+121 
+oi
+ += 2;
+
+122 
+£nd_”rÜ
+;
+
+123 } if(
+æg
+ == 0){
+
+125 if(
+p
++4 <ğ
+xËn
+){
+
+126 
+	`memıy
+(
+wß
+ + 
+oi
+ + 
+p
+, &
+ms
+, 4);
+
+127 
+wß
+[
+oi
++2] += 4;
+
+129 
+ov”æowed
+ = 1;
+
+130 } if(
+æg
+ == 1){
+
+132 if(
+p
++8 <ğ
+xËn
+){
+
+133 
+	`memıy
+(
+wß
+ + 
+oi
+ + 
+p
+, &
+_´eã¼ed_addr
+, 4);
+
+134 
+	`memıy
+(
+wß
+ + 
+oi
+ + 
+p
+ + 4, &
+ms
+, 4);
+
+135 
+wß
+[
+oi
++2] += 8;
+
+137 
+ov”æowed
+ = 1;
+
+138 } ià(
+æg
+ =ğ3 && 
+p
+ + 8 <ğ
+xËn
+) {
+
+139 
+addr
+;
+
+140 
+	`memıy
+(&
+addr
+, 
+ß
+ + 
+oi
+ + 
+p
+, 4);
+
+142 ià(
+	`fšd
+(
+_my_addrs
+.
+	`begš
+(), _my_addrs.
+	`’d
+(), 
+	`IPAdd»ss
+(
+addr
+)) < _my_addrs.end()) {
+
+143 
+	`memıy
+(
+wß
+ + 
+oi
+ + 
+p
+ + 4, &
+ms
+, 4);
+
+144 
+wß
+[
+oi
++2] += 8;
+
+147 
+oi
+ += 3;
+
+148 
+£nd_”rÜ
+;
+
+150 ià(
+ov”æowed
+) {
+
+151 ià(
+oæw
+ < 15)
+
+152 
+wß
+[
+oi
++3] = ((
+oæw
+ + 1è<< 4è| 
+æg
+;
+
+154 
+oi
+ += 3;
+
+155 
+£nd_”rÜ
+;
+
+160 
+oi
+ +ğ
+xËn
+;
+
+163 ià(
+wp
+) {
+
+164 
+şick_
+ *
+h
+ = 
+wp
+->
+	`_h—d”
+();
+
+165 
+h
+->
+_sum
+ = 0;
+
+166 
+h
+->
+_sum
+ = 
+	`şick_š_cksum
+(
+p
+->
+	`ÃtwÜk_h—d”
+(), 
+hËn
+);
+
+169  (
+wp
+ ? w°: 
+p
+);
+
+171 
+£nd_”rÜ
+:
+
+172 
+_drİs
+++;
+
+173 
+	`SET_ICMP_PARAMPROB_ANNO
+(
+p
+, 
+oi
+);
+
+175 
+Pack‘
+* 
+d¡
+ = 
+»š‹½»t_ÿ¡
+<Pack‘*>(&(
+_ÿmkes_buf
+->
+cÚ‹Á
+));
+
+176 ià(((vŞ©
+mes§ge_t
+*)
+_ÿmkes_buf
+)->
+»ady
+){
+
+177 
+p
+->
+	`kl
+();
+
+180 
+Camkes_cÚfig
+::
+	`·ck‘_£rŸlize
+(
+d¡
+,
+p
+);
+
+181 
+_ÿmkes_buf
+->
+»ady
+ = 1;
+
+182 
+p
+->
+	`kl
+();
+
+184 
+	}
+}
+
+186 
+Pack‘
+ *
+
+187 
+	gCamkes_IPGWO±iÚs
+::
+	$sim¶e_aùiÚ
+(
+Pack‘
+ *
+p
+)
+
+189 
+	`as£¹
+(
+p
+->
+	`has_ÃtwÜk_h—d”
+());
+
+190 cÚ¡ 
+şick_
+ *
+
+ = 
+p
+->
+	`_h—d”
+();
+
+191 
+hËn
+ = 
+
+->
+_hl
+ << 2;
+
+192 ià(
+hËn
+ <ğ(
+şick_
+è|| (
+p
+ = 
+	`hªdË_İtiÚs
+(p)))
+
+193 (
+p
+);
+
+195 
+	}
+}
+
+198 
+	gCamkes_IPGWO±iÚs
+::
+	$add_hªdËrs
+()
+
+200 
+	`add_d©a_hªdËrs
+("drİs", 
+HªdËr
+::
+OP_READ
+, &
+_drİs
+);
+
+201 
+	}
+}
+
+203 
+CLICK_ENDDECLS
+
+
+204 
+	$EXPORT_ELEMENT
+(
+Camkes_IPGWO±iÚs
+)
+
+205 
+	`ELEMENT_MT_SAFE
+(
+Camkes_IPGWO±iÚs
+)
+
+	@camkes_ipgwoptions.hh
+
+1 #iâdeà
+CLICK_IPGWOPTIONS_HH
+
+
+2 
+	#CLICK_IPGWOPTIONS_HH
+
+
+	)
+
+3 
+	~<şick/–em’t.hh
+>
+
+4 
+	~<şick/glue.hh
+>
+
+5 
+	~<şick/©omic.hh
+>
+
+6 
+	~<pÜ‰y³.h
+>
+
+7 
+CLICK_DECLS
+
+
+37 şas 
+	cCamkes_IPGWO±iÚs
+ : 
+public
+ 
+EËm’t
+ {…ublic:
+
+39 
+	$Camkes_IPGWO±iÚs
+(è
+CLICK_COLD
+;
+
+40 ~
+	$Camkes_IPGWO±iÚs
+(è
+CLICK_COLD
+;
+
+41 
+	`Camkes_IPGWO±iÚs
+(
+mes§ge_t
+*);
+
+43 cÚ¡ *
+	$şass_Çme
+() const {  "Camkes_IPGWOptions"; }
+
+44 cÚ¡ *
+	$pÜt_couÁ
+(ècÚ¡ {  
+PORTS_1_1X2
+; 
+	}
+}
+
+45 cÚ¡ *
+	$´oûssšg
+(ècÚ¡ {  
+PROCESSING_A_AH
+; 
+	}
+}
+
+46 
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &, 
+E¼ÜHªdËr
+ *è
+	gCLICK_COLD
+;
+
+47 
+	$add_hªdËrs
+(è
+CLICK_COLD
+;
+
+49 
+ušt32_t
+ 
+	$drİs
+(ècÚ¡ {  
+_drİs
+; 
+	}
+}
+
+51 
+Pack‘
+ *
+hªdË_İtiÚs
+(Packet *);
+
+52 
+Pack‘
+ *
+sim¶e_aùiÚ
+(Packet *);
+
+54 
+	g´iv©e
+:
+
+56 
+©omic_ušt32_t
+ 
+_drİs
+;
+
+57 
+š_addr
+ 
+	g_´eã¼ed_addr
+;
+
+58 
+	gVeùÜ
+<
+	gIPAdd»ss
+> 
+	g_my_addrs
+;
+
+59 
+mes§ge_t
+ * 
+	g_ÿmkes_buf
+;
+
+62 
 	gCLICK_ENDDECLS
 
 
@@ -6127,15 +8665,21 @@ pÜt
 cÚ‹Á
 ));
 
-264 ((vŞ©
+264 ià(((vŞ©
 mes§ge_t
 *)
 _ÿmkes_buf
 )->
 »ady
-);
+){
 
 265 
+p
+->
+	`kl
+();
+
+268 
 Camkes_cÚfig
 ::
 	`·ck‘_£rŸlize
@@ -6145,13 +8689,13 @@ d¡
 p
 );
 
-266 
+269 
 p
 ->
 	`kl
 ();
 
-267 
+270 
 _ÿmkes_buf
 [
 e
@@ -6161,7 +8705,7 @@ pÜt
 »ady
  = 1;
 
-270 
+273 
 	`ouut
 (
 e
@@ -6173,21 +8717,21 @@ pÜt
 p
 );
 
-272 
+275 
 	}
 }
 
-274 
+277 
 CLICK_ENDDECLS
 
 
-275 
+278 
 	$ELEMENT_REQUIRES
 (
 Camkes_IPRou‹TabË
 )
 
-276 
+279 
 	`EXPORT_ELEMENT
 (
 Camkes_Lš—rIPLookup
@@ -6827,7 +9371,7 @@ p
 	`sim¶e_aùiÚ
 (p);
 
-54 ià(
+53 ià(
 p
 ){
 
@@ -6843,15 +9387,21 @@ _ÿmkes_buf
 cÚ‹Á
 ));
 
-57 ((vŞ©
+57 ià(((vŞ©
 mes§ge_t
 *)
 _ÿmkes_buf
 )->
 »ady
-);
+){
 
 58 
+p
+->
+	`kl
+();
+
+61 
 Camkes_cÚfig
 ::
 	`·ck‘_£rŸlize
@@ -6861,27 +9411,27 @@ d¡
 p
 );
 
-59 
+62 
 _ÿmkes_buf
 ->
 »ady
  = 1;
 
-60 
+63 
 p
 ->
 	`kl
 ();
 
-63 
+66 
 	}
 }
 
-66 
+69 
 Pack‘
  *
 
-67 
+70 
 	gCamkes_Pašt
 ::
 	$sim¶e_aùiÚ
@@ -6891,7 +9441,7 @@ Pack‘
 p
 )
 
-69 
+72 
 p
 ->
 	`£t_ªno_u8
@@ -6901,21 +9451,21 @@ _ªno
 _cŞÜ
 );
 
-70  
+73  
 p
 ;
 
-71 
+74 
 	}
 }
 
-74 
+77 
 	gCamkes_Pašt
 ::
 	$add_hªdËrs
 ()
 
-76 
+79 
 	`add_d©a_hªdËrs
 ("cŞÜ", 
 HªdËr
@@ -6927,21 +9477,21 @@ OP_WRITE
 _cŞÜ
 );
 
-77 
+80 
 	}
 }
 
-79 
+82 
 CLICK_ENDDECLS
 
 
-80 
+83 
 	$EXPORT_ELEMENT
 (
 Pašt
 )
 
-81 
+84 
 	`ELEMENT_MT_SAFE
 (
 Pašt
@@ -7076,6 +9626,340 @@ _cŞÜ
 };
 
 50 
+	gCLICK_ENDDECLS
+
+
+	@camkes_painttee.cc
+
+19 
+	~<şick/cÚfig.h
+>
+
+20 
+	~"ÿmkes_·š‰“.hh
+"
+
+21 
+	~<şick/¬gs.hh
+>
+
+22 
+	~<şick/”rÜ.hh
+>
+
+23 
+	~<şick/·ck‘_ªno.hh
+>
+
+24 
+	~<şick/ÿmkes_cÚfig.hh
+>
+
+25 
+CLICK_DECLS
+
+
+27 
+	gCamkes_PaštT“
+::
+	$Camkes_PaštT“
+()
+
+29 
+	}
+}
+
+31 
+Camkes_PaštT“
+::
+	$Camkes_PaštT“
+(
+mes§ge_t
+* 
+bufãr
+):
+	$_ÿmkes_buf
+(
+bufãr
+)
+
+33 
+	}
+}
+
+36 
+Camkes_PaštT“
+::
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &
+cÚf
+, 
+E¼ÜHªdËr
+ *
+”rh
+)
+
+38 
+	gªno
+ = 
+PAINT_ANNO_OFFSET
+;
+
+39 ià(
+Args
+(
+cÚf
+, 
+this
+, 
+”rh
+)
+
+40 .
+»ad_mp
+("COLOR", 
+_cŞÜ
+)
+
+41 .
+»ad_p
+("ANNO", 
+AÂoArg
+(1), 
+ªno
+).
+com¶‘e
+() < 0)
+
+43 
+	g_ªno
+ = 
+ªno
+;
+
+47 
+Pack‘
+ *
+
+48 
+	gCamkes_PaštT“
+::
+	$sim¶e_aùiÚ
+(
+Pack‘
+ *
+p
+)
+
+51 ià(
+p
+->
+	`ªno_u8
+(
+_ªno
+è=ğ
+_cŞÜ
+){
+
+53 
+Pack‘
+* 
+d¡
+ = 
+»š‹½»t_ÿ¡
+<Pack‘*>(&(
+_ÿmkes_buf
+->
+cÚ‹Á
+));
+
+54 ((vŞ©
+mes§ge_t
+*)
+_ÿmkes_buf
+)->
+»ady
+);
+
+55 
+Camkes_cÚfig
+::
+	`·ck‘_£rŸlize
+(
+d¡
+,
+p
+);
+
+56 
+_ÿmkes_buf
+->
+»ady
+ = 1;
+
+58 (
+p
+);
+
+59 
+	}
+}
+
+62 
+	gCamkes_PaštT“
+::
+	$add_hªdËrs
+()
+
+64 
+	`add_d©a_hªdËrs
+("cŞÜ", 
+HªdËr
+::
+OP_READ
+ | HªdËr::
+OP_WRITE
+, &
+_cŞÜ
+);
+
+65 
+	}
+}
+
+67 
+CLICK_ENDDECLS
+
+
+68 
+	$EXPORT_ELEMENT
+(
+Camkes_PaštT“
+)
+
+69 
+	`ELEMENT_MT_SAFE
+(
+Camkes_PaštT“
+)
+
+	@camkes_painttee.hh
+
+1 #iâdeà
+CLICK_PAINTTEE_HH
+
+
+2 
+	#CLICK_PAINTTEE_HH
+
+
+	)
+
+3 
+	~<şick/–em’t.hh
+>
+
+4 
+	~<pÜ‰y³.h
+>
+
+5 
+CLICK_DECLS
+
+
+32 şas 
+	cCamkes_PaštT“
+ : 
+public
+ 
+EËm’t
+ {…ublic:
+
+34 
+	$Camkes_PaštT“
+(è
+CLICK_COLD
+;
+
+35 
+	`Camkes_PaštT“
+(
+mes§ge_t
+*);
+
+37 cÚ¡ *
+	$şass_Çme
+() const {  "Camkes_PaintTee"; }
+
+38 cÚ¡ *
+	$pÜt_couÁ
+(ècÚ¡ {  "1/2"; 
+	}
+}
+
+39 cÚ¡ *
+	$´oûssšg
+(ècÚ¡ {  
+PROCESSING_A_AH
+; 
+	}
+}
+
+41 
+cÚfigu»
+(
+VeùÜ
+<
+SŒšg
+> &, 
+E¼ÜHªdËr
+ *è
+	gCLICK_COLD
+;
+
+42 
+	$add_hªdËrs
+(è
+CLICK_COLD
+;
+
+44 
+Pack‘
+ *
+	`sim¶e_aùiÚ
+(Packet *);
+
+46 
+´iv©e
+:
+
+47 
+mes§ge_t
+* 
+_ÿmkes_buf
+;
+
+48 
+ušt8_t
+ 
+_ªno
+;
+
+49 
+ušt8_t
+ 
+_cŞÜ
+;
+
+51 
+	}
+};
+
+53 
 	gCLICK_ENDDECLS
 
 
@@ -7503,7 +10387,7 @@ n
 i
  = 0; i < 
 n
- - 1; i++){
+; i++){
 
 50 
 Pack‘
@@ -7519,15 +10403,29 @@ i
 cÚ‹Á
 ));
 
-51 ((vŞ©
+51 ià(((vŞ©
 mes§ge_t
 *)
 _ÿmkes_buf
 )->
 »ady
-);
+){
 
 52 
+p
+->
+	`kl
+();
+
+55 
+¡d
+::
+cout
+ << "befÜ£rŸlize" << std::
+’dl
+;
+
+56 
 Camkes_cÚfig
 ::
 	`·ck‘_£rŸlize
@@ -7537,7 +10435,15 @@ d¡
 p
 );
 
-53 
+57 
+¡d
+::
+cout
+ << "aá” s”Ÿlize" << std::
+’dl
+;
+
+58 
 _ÿmkes_buf
 [
 i
@@ -7545,27 +10451,27 @@ i
 »ady
  = 1;
 
-55 
+60 
 p
 ->
 	`kl
 ();
 
-56 
+61 
 	}
 }
 
-62 
+67 
 	gPuÎCamkes_T“
 ::
 	$PuÎCamkes_T“
 ()
 
-64 
+69 
 	}
 }
 
-67 
+72 
 PuÎCamkes_T“
 ::
 cÚfigu»
@@ -7581,13 +10487,13 @@ E¼ÜHªdËr
 ”rh
 )
 
-69 
+74 
 	gn
  = 
 nouuts
 ();
 
-70 ià(
+75 ià(
 Args
 (
 cÚf
@@ -7603,13 +10509,13 @@ n
 com¶‘e
 () < 0)
 
-72 ià(
+77 ià(
 	gn
  !ğ(è
 nouuts
 ())
 
-73  
+78  
 ”rh
 ->
 ”rÜ
@@ -7617,17 +10523,17 @@ nouuts
 nouuts
 (),‚outputs());
 
-77 
+82 
 Pack‘
  *
 
-78 
+83 
 	gPuÎCamkes_T“
 ::
 	$puÎ
 ()
 
-80 
+85 
 Pack‘
  *
 p
@@ -7637,23 +10543,23 @@ p
 	`puÎ
 ();
 
-81 ià(
+86 ià(
 p
 ) {
 
-82 
+87 
 n
  = 
 	`nouuts
 ();
 
-83 
+88 
 i
  = 1; i < 
 n
 ; i++)
 
-84 ià(
+89 ià(
 Pack‘
  *
 q
@@ -7663,7 +10569,7 @@ p
 	`şÚe
 ())
 
-85 
+90 
 	`ouut
 (
 i
@@ -7673,19 +10579,19 @@ i
 q
 );
 
-87  
+92  
 p
 ;
 
-88 
+93 
 	}
 }
 
-90 
+95 
 CLICK_ENDDECLS
 
 
-91 
+96 
 	$EXPORT_ELEMENT
 (
 Camkes_T“
@@ -7693,13 +10599,13 @@ Camkes_T“
 PuÎT“
 )
 
-92 
+97 
 	$ELEMENT_MT_SAFE
 (
 Camkes_T“
 )
 
-93 
+98 
 	`ELEMENT_MT_SAFE
 (
 PuÎCamkes_T“
@@ -10060,12 +12966,18 @@ u
 .
 1
 /usr/include
-18
-370
+26
+536
 camkes_classifier.cc
 camkes_classifier.hh
+camkes_decipttl.cc
+camkes_decipttl.hh
 camkes_icmperror.cc
 camkes_icmperror.hh
+camkes_ipfragmenter.cc
+camkes_ipfragmenter.hh
+camkes_ipgwoptions.cc
+camkes_ipgwoptions.hh
 camkes_iproutetable.cc
 camkes_iproutetable.hh
 camkes_lineariplookup.cc
@@ -10074,6 +12986,8 @@ camkes_lookupiproute.cc
 camkes_lookupiproute.hh
 camkes_paint.cc
 camkes_paint.hh
+camkes_painttee.cc
+camkes_painttee.hh
 camkes_strip.cc
 camkes_strip.hh
 camkes_tee.cc

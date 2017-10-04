@@ -20,15 +20,16 @@ component rumprun_ether {
     RUMPRUN_COMPONENT_DEFINITION()
     uses PCIConfig pci_config;
     consumes IRQ eth_irq;
-    dataport message_t camkes_buffer;
+    dataport message_t paint_sendbuffer;
     dataport message_t db_buffer;
-    dataport message_t icmp_buffer;    
+    dataport message_t icmprd_buffer;
+    dataport message_t icmpmf_buffer;
+    dataport message_t icmpbp_buffer;
+    dataport message_t icmpttl_buffer;
     dataport message_t aq_recvbuffer;
     dataport message_t aq_sendbuffer;
     emits SomethingHappenedEvent camkes_ev;
     consumes SomethingHappenedEvent camkes_ev1;
-    //attribute string server_global_endpoint;
-    //attribute string server_badge;
     attribute string wm_val; 
     attribute string camkes_id_attributes;
     attribute string ip_addr;

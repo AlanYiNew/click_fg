@@ -60,20 +60,20 @@ click: $(cfiles) $(hfiles) \
 		$(SOURCE_DIR)/elements/camkes/camkes_paint.hh \
 		$(SOURCE_DIR)/elements/standard/dropbroadcasts.hh \
 		$(SOURCE_DIR)/elements/standard/dropbroadcasts.o \
-		$(SOURCE_DIR)/elements/standard/painttee.hh \
-		$(SOURCE_DIR)/elements/standard/painttee.o \
+		$(SOURCE_DIR)/elements/camkes/camkes_painttee.hh \
+		$(SOURCE_DIR)/elements/camkes/camkes_painttee.o \
 		$(SOURCE_DIR)/elements/camkes/camkes_icmperror.hh \
 		$(SOURCE_DIR)/elements/camkes/camkes_icmperror.o \
-		$(SOURCE_DIR)/elements/ip/ipgwoptions.hh \
-		$(SOURCE_DIR)/elements/ip/ipgwoptions.o \
+		$(SOURCE_DIR)/elements/camkes/camkes_ipgwoptions.hh \
+		$(SOURCE_DIR)/elements/camkes/camkes_ipgwoptions.o \
 		$(SOURCE_DIR)/elements/ip/ipnameinfo.hh \
 		$(SOURCE_DIR)/elements/ip/ipnameinfo.o \
 		$(SOURCE_DIR)/elements/ip/fixipsrc.hh \
 		$(SOURCE_DIR)/elements/ip/fixipsrc.o \
-		$(SOURCE_DIR)/elements/ip/decipttl.hh \
-		$(SOURCE_DIR)/elements/ip/decipttl.o \
-		$(SOURCE_DIR)/elements/ip/ipfragmenter.hh \
-		$(SOURCE_DIR)/elements/ip/ipfragmenter.o \
+		$(SOURCE_DIR)/elements/camkes/camkes_decipttl.hh \
+		$(SOURCE_DIR)/elements/camkes/camkes_decipttl.o \
+		$(SOURCE_DIR)/elements/camkes/camkes_ipfragmenter.hh \
+		$(SOURCE_DIR)/elements/camkes/camkes_ipfragmenter.o \
 		$(CLICK_LIBS)
 	@echo ${CURRENT_DIR}
 	$(RUMPRUN_CXX) -no-pie \

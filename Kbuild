@@ -13,5 +13,5 @@
 
 
 
-apps-$(CONFIG_APP_CLICK_SCRTACH) += click_scratch
-click_scratch: rumprun libsel4muslccamkes libsel4camkes
+apps-$(CONFIG_APP_CLICK_FG) += click_fg
+click_fg: rumprun libsel4muslccamkes libsel4camkes

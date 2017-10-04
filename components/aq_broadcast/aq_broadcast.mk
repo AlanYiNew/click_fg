@@ -32,9 +32,10 @@ aq_broadcast: $(cfiles) $(hfiles) \
 	$(SOURCE_DIR)/elements/standard/addressinfo.o \
 	$(SOURCE_DIR)/elements/camkes/camkes_tee.o \
 	$(SOURCE_DIR)/elements/camkes/camkes_tee.hh \
+	$(SOURCE_DIR)/elements/ip/ipnameinfo.o \
+	$(SOURCE_DIR)/elements/ip/ipnameinfo.hh \
 	$(CLICK_LIBS) 
 	@echo ${CURRENT_DIR}
-	@echo $(central_routing_HFILES)
 	$(RUMPRUN_CXX) -no-pie \
 		-include $(SOURCE_DIR)/include/click/config.h \
 		-I${RUMP_BUILD_DIR}/x86_64/rumprun/rumprun-x86_64/include/c++  \

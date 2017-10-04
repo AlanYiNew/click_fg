@@ -35,12 +35,22 @@ void Camkes_config::initialize(Element* tar, ErrorHandler * eh){
 void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num){
     while (true){
         _timerset.run_timers();
+        for (int i = 0; i < num; i++){
+            cp[i].push();
+        }
+    }
+}
+
+void Camkes_config::start_proxy(Camkes_proxy *cp,int num){
+    while (true){
+        _timerset.run_timers();
 
         for (int i = 0; i < num; i++){
             cp[i].push();
         }
     }
 }
+
 
 void Camkes_config::start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy * cp,int num){
     while (true){
@@ -55,7 +65,6 @@ void Camkes_config::start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy
 
 //Mashalling
 int Camkes_config::packet_serialize(Packet * dst,Packet *src){
-    
     memcpy(dst,src,sizeof(Packet));
     dst->_head = reinterpret_cast<unsigned char*>(dst) + sizeof(Packet);
     //I made the shared memory buffer the size of 4096 - sizeof(int) - sizeof(Packet). It should still be far greater than any buffer_length() whose max value normally may just be 2048
@@ -135,10 +144,13 @@ Camkes_proxy_m::Camkes_proxy_m(Element * elemm, Camkes_proxy_m::buf_func_t func 
 void Camkes_proxy_m::push(){
     for (int i = 0; i < nclient; i++){
         if (((message_t*)func(i))->ready){
+
             Packet * p;
             Camkes_config::deserialize_packet(p,(void*)(&(((message_t*)func(i))->content)));
+            
             ((message_t*)func(i))->ready = 0;
             elem->push(port,p);
+            
         }
     }
 }

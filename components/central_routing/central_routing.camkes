@@ -19,7 +19,7 @@ component central_routing {
     RUMPRUN_COMPONENT_DEFINITION()
     uses PCIConfig pci_config;
     control;
-    dataport message_t buffer;
+    dataport message_t paint_recvbuffer;
     dataport message_t db_buffer;
     dataport message_t icmp_buffer;
     consumes SomethingHappenedEvent ev;
@@ -30,6 +30,6 @@ component central_routing {
     emits SomethingHappenedEvent ev3;
     attribute string ip_addr0;
     attribute string ip_addr1;
-    //attribute string ip_addr2;
+    attribute string ip_addr2;
     attribute string rt[];
 }

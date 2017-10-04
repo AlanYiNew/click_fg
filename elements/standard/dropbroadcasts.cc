@@ -28,7 +28,7 @@ DropBroadcasts::simple_action(Packet *p)
     drop_it(p);
     return 0;
   } else{
-    return p;
+      return p;
   }
 }
 

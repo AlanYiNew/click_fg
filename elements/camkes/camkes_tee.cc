@@ -45,10 +45,14 @@ void
 Camkes_Tee::push(int, Packet *p)
 {
   int n = noutputs();
-  for (int i = 0; i < n - 1; i++){
+ 
+  for (int i = 0; i < n; i++){
         //camkes proxy
         Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf[i]->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
+        if (((volatile message_t*)_camkes_buf[i])->ready){
+            p->kill();
+            return;
+        }
         Camkes_config::packet_serialize(dst,p);
         _camkes_buf[i]->ready = 1;
   }

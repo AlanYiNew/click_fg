@@ -26,6 +26,8 @@
 #include <click/element.hh>
 #include <click/error.hh>
 #include "elements/camkes/camkes_tee.hh"
+#include "elements/ip/ipnameinfo.hh"
+#include <click/nameinfo.hh>
 #include <vector>
 #include <string>
 
@@ -50,7 +52,12 @@ int main(int argc, char *argv[]) {
     
     /* Click configuration */
     int re = 0;
-    
+
+    NameInfo::static_initialize();
+    IPNameInfo::static_initialize();
+
+
+
     //Shared pin,pout
     const int pin_v[1] = {1};//0:Bidirectional 1:push 2:pull
     const int pout_v[NUM_COMPONENT] = {1,1,1};
@@ -61,6 +68,7 @@ int main(int argc, char *argv[]) {
     Camkes_Tee cTee((message_t**)aqb_sendbuffer); 
     Vector<String> cTee_config;
     cTee_config.push_back("3");
+
     re = Camkes_config::set_nports(&cTee,1,3); 
     debugging("setting n ports for cTee",re);
     re = cTee.configure(cTee_config,&feh); 
@@ -74,11 +82,10 @@ int main(int argc, char *argv[]) {
         {&cTee,aqb_recvbuffer_buf,NUM_COMPONENT}
     };
 
-    while(true) {
-        /* Wait for event */ 
-        //A function detects if a pakcet is injected in the corresponding buffer
-        Camkes_config::start_proxy(cp,1);   
-    }
+    
+    /* Wait for event */ 
+    //A function detects if a pakcet is injected in the corresponding buffer
+    Camkes_config::start_proxy(cp,1);   
 
     return 0;
 }
@@ -89,9 +96,9 @@ extern "C"{
         //section[0] = (message_t*)buffer0;
         //section[1] = (message_t*)buffer1;
 
-        aqb_sendbuffer[1] = aqb_sendbuffer_buf(1);
-        aqb_sendbuffer[2] = aqb_sendbuffer_buf(0);
-        aqb_sendbuffer[3] = aqb_sendbuffer_buf(2);
+        aqb_sendbuffer[0] = aqb_sendbuffer_buf(1);
+        aqb_sendbuffer[1] = aqb_sendbuffer_buf(0);
+        aqb_sendbuffer[2] = aqb_sendbuffer_buf(2);
 
     }
 }

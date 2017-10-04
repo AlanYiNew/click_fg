@@ -13,8 +13,8 @@
 
 
 
-config APP_CLICK_SCRTACH
-    bool "click scrtach CAmkES application"
+config APP_CLICK_FG
+    bool "click scrtach CAmkES application (more fine-grain)"
     default n
     help
-        A trial click router app on CAmKES with rump kernel encapsulating the driver
+        A trial click router app on CAmKES with rump kernel encapsulating the driver (More fine-grain)

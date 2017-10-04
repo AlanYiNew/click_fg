@@ -41,7 +41,7 @@ eventfunc_t ev_func[NUM_COMPONENT];//upstream respond emit
 extern "C" {
     //message_t *section[NUM_COMPONENT];
     void ev_wait(void);
-    void* buffer_buf(int); 
+    void* paint_recvbuffer_buf(int); 
     void ev1_emit(void);
     void ev2_emit(void);
     void ev3_emit(void);
@@ -56,7 +56,7 @@ extern "C" {
 #pragma weak ev1_emit
 #pragma weak ev2_emit
 #pragma weak ev3_emit
-#pragma weak buffer_buf
+#pragma weak paint_recvbuffer_buf
 #pragma weak db_buffer_buf
 #pragma weak ev_wait
 #pragma weak ip_addr1
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
     int c = 0;
     Camkes_proxy_m cp[2] = {
         {&clir,icmp_buffer_buf,NUM_COMPONENT},
-        {&strip,buffer_buf,NUM_COMPONENT}
+        {&strip,paint_recvbuffer_buf,NUM_COMPONENT}
     };
 
     while(true) {

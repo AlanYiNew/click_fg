@@ -254,19 +254,27 @@ void
 Camkes_Classifier::push(int, Packet *p)
 {
    int port =  _prog.match(p);
-   if (port != 1){
+   if (proxy_buffer[port] == NULL){
       checked_output_push(port, p);
    }    else{
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
+        Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[port]->content));
+        if (((volatile message_t*)proxy_buffer[port])->ready){
+            p->kill();
+            return;
+        }
         Camkes_config::packet_serialize(dst,p); 
-        _camkes_buf->ready = 1;
+        proxy_buffer[port]->ready = 1;
         p->kill();
    }
 }
 
-Camkes_Classifier::Camkes_Classifier(message_t * _camkes_buf){
-    this->_camkes_buf = _camkes_buf;
+
+
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_Classifier::setup_proxy(message_t** buffers,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i]; 
+    }   
 }
 
 CLICK_ENDDECLS

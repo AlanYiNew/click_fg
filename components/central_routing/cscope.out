@@ -1,4 +1,4 @@
-cscope 15 /thesis/camkes-rumprun/projects/camkes/apps/click_scratch/components/central_routing               0000258889
+cscope 15 /thesis/camkes-rumprun/projects/camkes/apps/click_fg/components/central_routing               0000257734
 	@central_routing.cxx
 
 13 
@@ -100,7 +100,7 @@ ev_wa™
 ();
 
 44 * 
-bufãr_buf
+·št_»cvbufãr_buf
 ();
 
 45 
@@ -111,40 +111,58 @@ ev1_em™
 ev2_em™
 ();
 
+47 
+ev3_em™
+();
+
 48 cÚ¡ *
+_addr0
+;
+
+49 cÚ¡ *
 _addr1
 ;
 
-50 cÚ¡ * 
+50 cÚ¡ *
+_addr2
+;
+
+51 cÚ¡ * 
 ¹
 [
 RT_NUM_ENTRY
 ];
 
-51 * 
+52 * 
 db_bufãr_buf
 ();
 
 53 * 
-icmp_buf
+icmp_bufãr_buf
 ();
 
-57 #´agm¨
+56 #´agm¨
 w—k
  
 ev1_em™
 
 
-58 #´agm¨
+57 #´agm¨
 w—k
  
 ev2_em™
 
 
+58 #´agm¨
+w—k
+ 
+ev3_em™
+
+
 59 #´agm¨
 w—k
  
-bufãr_buf
+·št_»cvbufãr_buf
 
 
 60 #´agm¨
@@ -168,10 +186,28 @@ w—k
 63 #´agm¨
 w—k
  
+_addr0
+
+
+64 #´agm¨
+w—k
+ 
+_addr2
+
+
+65 #´agm¨
+w—k
+ 
 ¹
 
 
-69 
+66 #´agm¨
+w—k
+ 
+icmp_bufãr_buf
+
+
+71 
 šlše
  
 	$debuggšg
@@ -181,7 +217,7 @@ s
 v®
 ){
 
-70 
+72 
 ¡d
 ::
 cout
@@ -197,11 +233,11 @@ v®
 ’dl
 ;
 
-71 
+73 
 	}
 }
 
-73 
+75 
 	$maš
 (
 ¬gc
@@ -209,19 +245,19 @@ v®
 ¬gv
 []) {
 
-77 
+78 
 »
  = 0;
 
-80 cÚ¡ 
+81 cÚ¡ 
 pš_v
 [1] = {1};
 
-81 cÚ¡ 
+82 cÚ¡ 
 pout_v
 [1] = {1};
 
-84 
+85 
 FeE¼ÜHªdËr
  
 	`ãh
@@ -229,22 +265,16 @@ FeE¼ÜHªdËr
 ¡d”r
 ,"");
 
-87 
+88 
 SŒ
  
 ¡r
 ;
 
-89 
+90 
 CheckIPH—d”
  
 cih
-;
-
-91 
-Pršt
- 
-´št
 ;
 
 93 
@@ -295,7 +325,7 @@ RT_NUM_ENTRY
 i
 ]);
 
-106 
+105 
 »
  = 
 Camkes_cÚfig
@@ -303,15 +333,17 @@ Camkes_cÚfig
 	`£t_ÅÜts
 (&
 şœ
-,1,2);
+,1,
+NUM_COMPONENT
++1);
 
-107 
+106 
 	`debuggšg
 ("£‰šg‚…Üt fÜ clœ",
 »
 );
 
-108 
+107 
 »
  = 
 şœ
@@ -323,19 +355,19 @@ Camkes_cÚfig
 ãh
 );
 
-109 
+108 
 	`debuggšg
 ("fšish cÚfigu¿tiÚ fÜ clœ",
 »
 );
 
-110 cÚ¡ 
+109 cÚ¡ 
 şœ_pout_v
 [
 NUM_COMPONENT
-+1] = {1,1};
++1] = {1,1,1,1};
 
-111 
+110 
 Camkes_cÚfig
 ::
 	`š™Ÿlize_pÜts
@@ -344,10 +376,10 @@ Camkes_cÚfig
 ,
 pš_v
 ,
-pout_v
+şœ_pout_v
 );
 
-112 
+111 
 Camkes_cÚfig
 ::
 	`cÚÃù_pÜt
@@ -356,10 +388,10 @@ Camkes_cÚfig
 ,
 Œue
 ,0,&
-´št
+disÿrd
 ,0);
 
-115 
+114 
 VeùÜ
 <
 SŒšg
@@ -367,13 +399,13 @@ SŒšg
 gŸ_cÚfig
 ;
 
-116 
+115 
 gŸ_cÚfig
 .
 	`push_back
 ("OFFSET 16");
 
-117 
+116 
 »
  = 
 Camkes_cÚfig
@@ -383,13 +415,13 @@ Camkes_cÚfig
 gŸ
 ,1,1);
 
-118 
+117 
 	`debuggšg
 ("£‰šg‚…Üt fÜ gŸ",
 »
 );
 
-119 
+118 
 »
  = 
 gŸ
@@ -401,13 +433,13 @@ gŸ_cÚfig
 ãh
 );
 
-120 
+119 
 	`debuggšg
 ("fšish cÚfigu¿tiÚ fÜ gŸ",
 »
 );
 
-121 
+120 
 Camkes_cÚfig
 ::
 	`š™Ÿlize_pÜts
@@ -419,7 +451,7 @@ pš_v
 pout_v
 );
 
-122 
+121 
 Camkes_cÚfig
 ::
 	`cÚÃù_pÜt
@@ -431,7 +463,7 @@ gŸ
 şœ
 ,0);
 
-125 
+124 
 VeùÜ
 <
 SŒšg
@@ -439,13 +471,13 @@ SŒšg
 ¡r_cÚfig
 ;
 
-126 
+125 
 ¡r_cÚfig
 .
 	`push_back
 ("LENGTH 14");
 
-127 
+126 
 »
  = 
 Camkes_cÚfig
@@ -455,13 +487,13 @@ Camkes_cÚfig
 ¡r
 ,1,1);
 
-128 
+127 
 	`debuggšg
 ("£‰šg‚…Üt fÜ sŒ",
 »
 );
 
-129 
+128 
 »
  = 
 ¡r
@@ -473,13 +505,13 @@ Camkes_cÚfig
 ãh
 );
 
-130 
+129 
 	`debuggšg
 ("fšish cÚfigu¿tiÚ fÜ sŒ",
 »
 );
 
-131 
+130 
 Camkes_cÚfig
 ::
 	`š™Ÿlize_pÜts
@@ -491,7 +523,7 @@ pš_v
 pout_v
 );
 
-132 
+131 
 Camkes_cÚfig
 ::
 	`cÚÃù_pÜt
@@ -503,7 +535,7 @@ Camkes_cÚfig
 cih
 ,0);
 
-135 
+134 
 VeùÜ
 <
 SŒšg
@@ -511,7 +543,7 @@ SŒšg
 cih_cÚfig
 ;
 
-136 
+135 
 cih_cÚfig
 .
 	`push_back
@@ -519,9 +551,11 @@ cih_cÚfig
 	`SŒšg
 ("INTERFACES "è+ 
 _addr1
+ + " " + 
+_addr0
 );
 
-137 
+136 
 »
  = 
 Camkes_cÚfig
@@ -531,13 +565,13 @@ Camkes_cÚfig
 cih
 ,1,1);
 
-138 
+137 
 	`debuggšg
 ("£‰šg‚…Üt fÜ cih",
 »
 );
 
-139 
+138 
 »
  = 
 cih
@@ -549,13 +583,13 @@ cih_cÚfig
 ãh
 );
 
-140 
+139 
 	`debuggšg
 ("fšish cÚfigu¿tiÚ fÜ cih",
 »
 );
 
-141 
+140 
 Camkes_cÚfig
 ::
 	`š™Ÿlize_pÜts
@@ -567,7 +601,7 @@ pš_v
 pout_v
 );
 
-142 
+141 
 Camkes_cÚfig
 ::
 	`cÚÃù_pÜt
@@ -579,79 +613,7 @@ cih
 gŸ
 ,0);
 
-145 
-VeùÜ
-<
-SŒšg
-> 
-´št_cÚfig
-;
-
-146 
-´št_cÚfig
-.
-	`push_back
-("ok");
-
-147 
-»
- = 
-Camkes_cÚfig
-::
-	`£t_ÅÜts
-(&
-´št
-,1,1);
-
-148 
-	`debuggšg
-("£‰šg‚…Üt fÜ…ršt",
-»
-);
-
-149 
-»
- = 
-´št
-.
-	`cÚfigu»
-(
-´št_cÚfig
-,&
-ãh
-);
-
-150 
-	`debuggšg
-("fšishšg cÚfigu¿tiÚ fÜ…ršt",
-»
-);
-
-151 
-Camkes_cÚfig
-::
-	`š™Ÿlize_pÜts
-(&
-´št
-,
-pš_v
-,
-pout_v
-);
-
-152 
-Camkes_cÚfig
-::
-	`cÚÃù_pÜt
-(&
-´št
-,
-Œue
-,0,&
-disÿrd
-,0);
-
-155 
+144 
 »
  = 
 Camkes_cÚfig
@@ -661,13 +623,13 @@ Camkes_cÚfig
 disÿrd
 ,1,0);
 
-156 
+145 
 	`debuggšg
 ("£‰šg‚…Üt fÜ disÿrd",
 »
 );
 
-157 
+146 
 Camkes_cÚfig
 ::
 	`š™Ÿlize_pÜts
@@ -679,274 +641,96 @@ pš_v
 NULL
 );
 
-158 
+147 
 	`debuggšg
 ("No configuration callo discard",0);
 
-160 
+149 
 couÁ
- = 2;
+ = 
+NUM_COMPONENT
+;
 
-161 
+150 
 c
  = 0;
 
-162 
+151 
 Camkes_´oxy_m
  
 ı
-[1] = {{&
+[2] = {
+
+152 {&
 şœ
 ,
-icmp_buf
-}};
+icmp_bufãr_buf
+,
+NUM_COMPONENT
+},
 
-163 
+153 {&
+¡r
+,
+·št_»cvbufãr_buf
+,
+NUM_COMPONENT
+}
+
+156 
 Œue
 ) {
 
-166 
-	`ev_wa™
-();
-
-168 
-¡d
-::
-cout
- << "unblocked by id:" << 
-c
- << std::
-’dl
-;
-
-169 *
-bufãr_¡r
-;
-
-170 
-c
- = 0;ø< 
-NUM_COMPONENT
- && !((
-mes§ge_t
- *)
-	`bufãr_buf
-(c))->
-»ady
-; c=(c+1)%NUM_COMPONENT){
-
-171 
-¡d
-::
-cout
- << "compÚ’t: " << 
-c
- << "„—dy: " << ((
-mes§ge_t
- *)
-	`bufãr_buf
-(c))->
-»ady
- << std::
-’dl
-;
-
-174 
-mes§ge_t
- * 
-mes§ge
- = ((mes§ge_ˆ*)
-	`bufãr_buf
-(
-c
-));
-
-176 ià(
-couÁ
--- > 0) {
-
-177 
-bufãr_¡r
- = (*)&(
-mes§ge
-->
-cÚ‹Á
-);
-
-178 
-Ën
- = 
-	`¡ºËn
-(
-bufãr_¡r
-, 
-PACKET_MAX_LEN
-);
-
-179 
-i
- = 0; i < 
-Ën
- / 2; ++i) {
-
-180 
-sw­_idx
- = 
-Ën
- - 
-i
- - 1;
-
-181 
-tmp
- = 
-bufãr_¡r
-[
-i
-];
-
-182 
-bufãr_¡r
-[
-i
-] = bufãr_¡r[
-sw­_idx
-];
-
-183 
-bufãr_¡r
-[
-sw­_idx
-] = 
-tmp
-;
-
-185 
-	`´štf
-("»suÉ sŒng:%s\n",
-bufãr_¡r
-);
-
-187 
-Pack‘
- *
-p
-;
-
-189 
-Camkes_cÚfig
-::
-	`de£rŸlize_·ck‘
-(
-p
-,(*)(&(
-mes§ge
-->
-cÚ‹Á
-)));
-
-190 
-	`´štf
-("%s\n",
-mes§ge
-->
-cÚ‹Á
-);
-
-191 
-	`´štf
-("Pÿk‘†’gth %d\n",
-p
-->
-	`Ëngth
-());
-
-193 cÚ¡ 
-şick_
- *
-
- = 
-»š‹½»t_ÿ¡
-<cÚ¡ click_ *>(
-p
-->
-	`d©a
-() + 14);
-
-195 
-¡d
-::
-cout
- << "->v:" << 
-
-->
-_v
- << std::
-’dl
-;
-
-197 
-¡r
-.
-	`push
-(0,
-p
-);
-
-199 
+161 
 Camkes_cÚfig
 ::
 	`¡¬t_´oxy
 (
 ı
-,1);
+,2);
 
-203 
-ev_func
-[
-c
-]();
-
-205 ((
-mes§ge_t
- *)
-	`bufãr_buf
-(
-c
-))->
-»ady
-=0;
-
-213 
+172 
 	}
 }
 
-216 
+175 
 ´e_š™
 (){
 
-221 
+180 
 db_bufãr
 [1] = 
 db_bufãr_buf
-(0);
+(1);
 
-222 
+181 
 db_bufãr
 [2] = 
 db_bufãr_buf
-(1);
+(0);
 
-226 
+182 
+db_bufãr
+[3] = 
+db_bufãr_buf
+(2);
+
+185 
 ev_func
 [0] = 
 ev1_em™
 ;
 
-227 
+186 
 ev_func
 [1] = 
 ev2_em™
+;
+
+187 
+ev_func
+[2] = 
+ev3_em™
 ;
 
 	@/usr/include/stdio.h

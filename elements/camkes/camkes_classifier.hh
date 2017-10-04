@@ -76,7 +76,7 @@ CLICK_DECLS
 class Camkes_Classifier : public Element { public:
 
     Camkes_Classifier() CLICK_COLD;
-    Camkes_Classifier(message_t* );
+    
     const char *class_name() const		{ return "Camkes_Classifier"; }
     const char *port_count() const		{ return "1/-"; }
     const char *processing() const		{ return PUSH; }
@@ -93,15 +93,20 @@ class Camkes_Classifier : public Element { public:
     static void parse_program(Classification::Wordwise::Program &prog,
 			      Vector<String> &conf, ErrorHandler *errh);
 
+    int setup_proxy(message_t** buffers,int );
+
   protected:
 
     Classification::Wordwise::Program _prog;
 
     static String program_string(Element *, void *);
 
+
   private:
-    message_t* _camkes_buf;
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
 };
+
+
 
 CLICK_ENDDECLS
 #endif

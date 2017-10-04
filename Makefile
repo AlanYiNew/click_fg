@@ -12,7 +12,7 @@
 #
 
 TARGETS := $(notdir ${SOURCE_DIR}).cdl
-ADL := click_scrtach.camkes
+ADL := click_fg.camkes
 TEMPLATES += ../../projects/global-components/templates/
 TEMPLATES += templates 
 
@@ -32,7 +32,8 @@ include ${SOURCE_DIR}/components/rump_ether/rump_ether.mk
 #include ${SOURCE_DIR}/components/reverse_string/server.mk
 include ${SOURCE_DIR}/components/central_routing/central_routing.mk
 include ${SOURCE_DIR}/components/aq_broadcast/aq_broadcast.mk
-
+include ${SOURCE_DIR}/components/icmp_set/icmp_set.mk
+include ${SOURCE_DIR}/components/com_paint/com_paint.mk
 include ${PWD}/tools/camkes/camkes.mk
 .PHONY: clean
 clean:

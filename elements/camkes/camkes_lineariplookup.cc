@@ -261,7 +261,10 @@ Camkes_LinearIPLookup::push(int, Packet *p)
     if (e.port != 0){
         //camkes proxy
         Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf[e.port]->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
+        if (((volatile message_t*)_camkes_buf)->ready){
+            p->kill();
+            return;
+        }
         Camkes_config::packet_serialize(dst,p);
         p->kill();
         _camkes_buf[e.port]->ready = 1;
