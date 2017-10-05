@@ -252,7 +252,6 @@ Classifier::add_handlers()
 void
 Classifier::push(int, Packet *p)
 {
-    std::cout << class_name() << " header length " << p->has_network_header() << " "<<p->network_header_length() << std::endl; 
     checked_output_push(_prog.match(p), p);
 }
 

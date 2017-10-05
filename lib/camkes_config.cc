@@ -78,16 +78,19 @@ int Camkes_config::packet_serialize(Packet * dst,Packet *src){
     
     if (src->mac_header())
         dst->set_mac_header(dst->data() + src->mac_header_offset() );
-    if (src->network_header())
+    
+    //if !has_transport_header() network_header_length is not valid
+    if (src->network_header() && src->has_transport_header())
         dst->set_network_header(dst->data() + src->network_header_offset(), src->network_header_length()); 
+
 }
+
 
 
 
 //vtable realted. Be careful.Demarshalling 
 void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     Packet * p = reinterpret_cast<Packet*>(src);  
-
     int headroom = p->headroom();
     int length = p->length();
     int nh_offset = p->network_header_offset();
@@ -95,7 +98,7 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     int nh_length = p->network_header_length();
     int buffer_length = p->buffer_length();
     int network_length = p->network_length();
-
+    bool hth = p->has_transport_header();
 
     p->_head = reinterpret_cast<unsigned char*>(src) + sizeof(Packet);
     p->_end = p->_head + buffer_length;
@@ -107,7 +110,7 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
      
     if (p->mac_header())
         dst->set_mac_header(dst->data() + mac_offset ); 
-    if (p->network_header())
+    if (p->network_header() && hth)
         dst->set_network_header(dst->data() + nh_offset, nh_length);
 
     //unsigned char *ipchar = ((unsigned char *)dst->data())+30; 
@@ -117,7 +120,6 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     //        std::cout << ".";
     //}
     //std::cout << std::endl;
-    
 }
 
 void Camkes_config::recycle(Packet * p){

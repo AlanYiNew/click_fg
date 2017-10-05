@@ -34,6 +34,7 @@ include ${SOURCE_DIR}/components/central_routing/central_routing.mk
 include ${SOURCE_DIR}/components/aq_broadcast/aq_broadcast.mk
 include ${SOURCE_DIR}/components/icmp_set/icmp_set.mk
 include ${SOURCE_DIR}/components/com_paint/com_paint.mk
+include ${SOURCE_DIR}/components/com_arpresponder/com_arpresponder.mk
 include ${PWD}/tools/camkes/camkes.mk
 .PHONY: clean
 clean:

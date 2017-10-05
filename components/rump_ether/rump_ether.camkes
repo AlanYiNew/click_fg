@@ -26,6 +26,8 @@ component rumprun_ether {
     dataport message_t icmpmf_buffer;
     dataport message_t icmpbp_buffer;
     dataport message_t icmpttl_buffer;
+    dataport message_t arpres_sendbuffer;
+    dataport message_t arpres_recvbuffer;
     dataport message_t aq_recvbuffer;
     dataport message_t aq_sendbuffer;
     emits SomethingHappenedEvent camkes_ev;
@@ -34,5 +36,4 @@ component rumprun_ether {
     attribute string camkes_id_attributes;
     attribute string ip_addr;
     attribute string mac;
-    attribute string proxy_arp[];
 }

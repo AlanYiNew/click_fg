@@ -82,10 +82,11 @@ extern "C" {
     void *icmpbp_buffer;
     void *icmpttl_buffer;
     void *icmpmf_buffer;
+    void *arpres_recvbuffer;
+    void *arpres_sendbuffer;
     const char * camkes_id_attributes;
     const char * ip_addr;
     const char * mac;
-    const char * proxy_arp[NUM_COMPONENT-1];
 }
 
 #pragma weak wm_val
@@ -101,10 +102,10 @@ extern "C" {
 #pragma weak icmpttl_buffer
 #pragma weak icmpmf_buffer
 #pragma weak icmpbp_buffer
-#pragma weak proxy_arp
 #pragma weak aq_sendbuffer
 #pragma weak aq_recvbuffer
-
+#pragma weak arpres_recvbuffer
+#pragma weak arpres_sendbuffer
 
 extern void click_export_elements();
 
@@ -115,7 +116,6 @@ const int pin_v2[2] = {1,1};
 const int pout_v2[2] = {1,1};
 void setup_cpaintTee(Camkes_PaintTee& paintTee,FileErrorHandler &feh );
 void setup_cipgwoptions(Camkes_IPGWOptions & ipgwoptions,FileErrorHandler &feh);
-void setup_arpRes(ARPResponder &arpRes,FileErrorHandler &feh);
 void setup_cclsf(Camkes_Classifier &clsf,FileErrorHandler &feh);
 void setup_tDev(ToDevice & tDev,FromDevice & fDev, FileErrorHandler & feh);
 void setup_fDev(FromDevice & fDev, FileErrorHandler & feh);
@@ -204,8 +204,7 @@ int main (int argc, char *argv[]) {
     Discard discard;
     //Todevice
     ToDevice tDev;
-    //Arp element
-    ARPResponder arpRes;
+    
     //Classifier
     Camkes_Classifier cclsf;
     //FromDevice
@@ -280,13 +279,10 @@ int main (int argc, char *argv[]) {
     Camkes_config::initialize_ports(&discard,pin_v,NULL);//We don't have output port putting in_v is fine
     debugging("No configuration call to discard",0);    
 
-    //Configuring arp element
-    setup_arpRes(arpRes,feh);  
-    Camkes_config::connect_port(&arpRes,true,0,&queue,0);//true int Elment int
-
+    
     //Configuring classifer 
     setup_cclsf(cclsf,feh);
-    Camkes_config::connect_port(&cclsf,true,0,&arpRes,0);//true int Elment int
+    //Camkes_config::connect_port(&cclsf,true,0,&arpRes,0);//true int Elment int
     //Camkes_config::connect_port(&cclsf,true,1,&arpQue,1);
     //Camkes_config::connect_port(&cclsf,true,2,&cpaint,0);//proxy
     Camkes_config::connect_port(&cclsf,true,3,&discard,0);//other packet 
@@ -302,9 +298,10 @@ int main (int argc, char *argv[]) {
     //Configuring queue 
     setup_queue(queue,feh); 
 
-    Camkes_proxy cp[2] = {{&db,(message_t*)db_buffer},
-                          {&arpQue,(message_t*)aq_recvbuffer,1}};    
-    Camkes_config::start_pcap_dispatch(&fDev,&tDev,cp,2);
+    Camkes_proxy cp[3] = {{&db,(message_t*)db_buffer},
+                          {&arpQue,(message_t*)aq_recvbuffer,1},
+                          {&queue, (message_t*)arpres_recvbuffer}};    
+    Camkes_config::start_pcap_dispatch(&fDev,&tDev,cp,3);
 
     return 0;
 
@@ -335,21 +332,7 @@ void setup_cipgwoptions(Camkes_IPGWOptions & ipgwoptions,FileErrorHandler &feh){
     Camkes_config::initialize_ports(&ipgwoptions,pin_v,pout_v);
 }
 
-void setup_arpRes(ARPResponder &arpRes,FileErrorHandler &feh){
-    Vector<String> arpRes_config;
-    arpRes_config.push_back(String(ip_addr) + String(" ") + String(mac));
-    for (int i = 0; i < NUM_COMPONENT-1; i++){
-        arpRes_config.push_back(proxy_arp[i]);
-    }
 
-    int re = Camkes_config::set_nports(&arpRes,1,1); 
-    debugging("setting n ports for arpResponder",re);
-    re = arpRes.configure(arpRes_config,&feh); 
-    debugging("finish configuration for arpResponder",re);
-    const int arpRes_in_v[1] = {1};//0:Bidirectional 1:push 2:pull
-    const int arpRes_out_v[1] = {1};
-    Camkes_config::initialize_ports(&arpRes,arpRes_in_v,arpRes_out_v); //one input three output
-}
 
 void setup_cclsf(Camkes_Classifier &clsf,FileErrorHandler &feh){
     //For etherType infomration look at here https://en.wikipedia.org/wiki/EtherType
@@ -364,7 +347,7 @@ void setup_cclsf(Camkes_Classifier &clsf,FileErrorHandler &feh){
     debugging("finish configuration for classifier",re);
     const int clsf_in_v[1] = {1};//0:Bidirectional 1:push 2:pull
     const int clsf_out_v[4] = {1,1,1,1};
-    message_t *proxy_buffer[4] = {NULL,
+    message_t *proxy_buffer[4] = {(message_t*) arpres_sendbuffer,
                                  (message_t*)aq_sendbuffer,
                                  (message_t*)paint_sendbuffer,
                                  NULL};
