@@ -289,7 +289,6 @@ void Camkes_ARPResponder::push(int port, Packet *p)
             p->kill();
             return;
         }
-        std::cout << "arp responder push" << std::endl;
         Camkes_config::packet_serialize(dst,p); 
         proxy_buffer[port]->ready = 1;
         proxy_event[port]();

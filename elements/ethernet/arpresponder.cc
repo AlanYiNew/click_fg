@@ -79,7 +79,6 @@ ARPResponder::add(Vector<Entry> &v, const String &arg, ErrorHandler *errh) const
     for (int i = old_vsize; i < v.size(); ++i)
 	v[i].ena = ena;
 
-    std::cout << "return succeed" << std::endl;
     return 0;
 }
 
