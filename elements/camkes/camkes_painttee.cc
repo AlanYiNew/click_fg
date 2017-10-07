@@ -28,9 +28,7 @@ Camkes_PaintTee::Camkes_PaintTee()
 {
 }
 
-Camkes_PaintTee::Camkes_PaintTee(message_t* buffer):_camkes_buf(buffer)
-{
-}
+
 
 int
 Camkes_PaintTee::configure(Vector<String> &conf, ErrorHandler *errh)
@@ -50,10 +48,11 @@ Camkes_PaintTee::simple_action(Packet *p)
     
     if (p->anno_u8(_anno) == _color){ 
         //camkes proxy
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
+        Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[1]->content));
+        while (((volatile message_t*)proxy_buffer[1])->ready);
         Camkes_config::packet_serialize(dst,p); 
         _camkes_buf->ready = 1;
+        proxy_event[1]();
     }
     return(p);
 }
@@ -62,6 +61,14 @@ void
 Camkes_PaintTee::add_handlers()
 {
     add_data_handlers("color", Handler::OP_READ | Handler::OP_WRITE, &_color);
+}
+
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_PaintTee::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
 }
 
 CLICK_ENDDECLS

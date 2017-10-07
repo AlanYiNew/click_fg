@@ -31,7 +31,6 @@ CLICK_DECLS
 
 Camkes_Paint::Camkes_Paint(){}
 
-Camkes_Paint::Camkes_Paint(message_t* camkes_buf):_camkes_buf(camkes_buf){}
 
 
 int
@@ -50,17 +49,21 @@ void Camkes_Paint::push(int port, Packet *p)
 { 
     p = simple_action(p);
     
-    if (p){
     
+    if (p){
         //camkes proxy
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        if (((volatile message_t*)_camkes_buf)->ready){
-           p->kill();
-           return;
+        if (proxy_buffer[0] == NULL){
+            checked_output_push(port,p);
+        }   else {Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[port]->content));
+            if (((volatile message_t*)proxy_buffer[port])->ready){
+                p->kill();
+                return;
+            }
+            Camkes_config::packet_serialize(dst,p); 
+            proxy_buffer[port]->ready = 1;
+            proxy_event[port]();
+            p->kill();
         }
-        Camkes_config::packet_serialize(dst,p); 
-        _camkes_buf->ready = 1;
-        p->kill();
     }
         
 }
@@ -77,6 +80,14 @@ void
 Camkes_Paint::add_handlers()
 {
     add_data_handlers("color", Handler::OP_READ | Handler::OP_WRITE, &_color);
+}
+
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_Paint::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
 }
 
 CLICK_ENDDECLS

@@ -37,12 +37,15 @@ extern "C" {
     void* paint_recvbuffer; 
     void* paint_sendbuffer;
     const char* camkes_id_attributes;
+    void ev_wait(void);
+    void ev2routing_emit(void);
 }
 
 #pragma weak paint_recvbuffer
 #pragma weak paint_sendbuffer
 #pragma weak camkes_id_attributes
-
+#pragma weak ev_wait
+#pragma weak ev2routing_emit
 void inline debugging(const char* s,int val){
     std::cout << "###### " << std::left <<std::setw(40) << s << ": " << val << " #####" << std::endl;
 }
@@ -64,7 +67,7 @@ int main(int argc, char *argv[]) {
     //Create a std erro handler for outputing message
     FileErrorHandler feh(stderr,"");
 
-    Camkes_Paint cpaint((message_t*)paint_sendbuffer); 
+    Camkes_Paint cpaint; 
     
     //Configuring cpaint
     setup_cpaint(cpaint,feh); 
@@ -79,7 +82,7 @@ int main(int argc, char *argv[]) {
     while(true) {
         /* Wait for event */ 
         //A function detects if a pakcet is injected in the corresponding buffer
-        Camkes_config::start_proxy(cp,1);   
+        Camkes_config::start_proxy(cp,1,ev_wait);   
     }
 
     return 0;
@@ -93,4 +96,8 @@ void setup_cpaint(Camkes_Paint& cpaint,FileErrorHandler & feh){
     re = cpaint.configure(cpaint_config,&feh);
     debugging("finishing configuration for paint",re);
     Camkes_config::initialize_ports(&cpaint,pin_v,pout_v); //one input one output
+    message_t* buffer[1] = {(message_t*)paint_sendbuffer};
+    eventfunc_t ev[1] = {ev2routing_emit};
+    cpaint.setup_proxy(buffer,ev,1);
+
 }

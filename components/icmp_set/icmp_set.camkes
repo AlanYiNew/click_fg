@@ -25,4 +25,6 @@ component icmp_set {
     dataport message_t icmpbp_buffer;
     dataport message_t icmp_buffer; 
     attribute string ip_addr;
+    consumes SomethingHappenedEvent ev;
+    emits SomethingHappenedEvent ev2routing;
 }

@@ -29,10 +29,8 @@ Get/set the color to paint.
 class Camkes_Paint : public Element { public:
 
     Camkes_Paint() CLICK_COLD;
-    message_t *_camkes_buf;
     const char *class_name() const		{ return "Camkes Paint"; }
     const char *port_count() const		{ return PORTS_1_1; }
-    Camkes_Paint(message_t* camkes_buf);
     int configure(Vector<String> &, ErrorHandler *) CLICK_COLD;
     bool can_live_reconfigure() const		{ return true; }
     void add_handlers() CLICK_COLD;
@@ -40,11 +38,14 @@ class Camkes_Paint : public Element { public:
     void push(int port, Packet *p);
     Packet *simple_action(Packet *);
 
+    int setup_proxy(message_t** buffers,eventfunc_t* notify,int num);
+
   private:
 
     uint8_t _anno;
     uint8_t _color;
-
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

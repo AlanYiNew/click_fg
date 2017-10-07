@@ -153,20 +153,18 @@ int main(int argc, char *argv[]) {
         {&strip,paint_recvbuffer_buf,NUM_COMPONENT}
     };
 
-    while(true) {
-        /* Wait for event */ 
+    /* Wait for event */ 
 
-        
-         //A function detects if a pakcet is injected in the corresponding buffer
-         Camkes_config::start_proxy(cp,2); 
-        
-       
-        
-        
-        //It's dynamically acllocated in camkes_config
-        //Not a good design but haven't found en effective way to do this 
-        //Camkes_config::recycle(p);
-    }
+
+    //A function detects if a pakcet is injected in the corresponding buffer
+    Camkes_config::start_proxy(cp,2,ev_wait); 
+
+
+
+
+    //It's dynamically acllocated in camkes_config
+    //Not a good design but haven't found en effective way to do this 
+    //Camkes_config::recycle(p);
 
     return 0;
 }

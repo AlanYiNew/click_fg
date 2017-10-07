@@ -74,6 +74,7 @@ class Camkes_IPFragmenter : public Element { public:
 
   void push(int, Packet *);
 
+  int setup_proxy(message_t** buffers,eventfunc_t* notify,int num);
  private:
 
   bool _honor_df;
@@ -82,7 +83,8 @@ class Camkes_IPFragmenter : public Element { public:
   unsigned _headroom;
   atomic_uint32_t _drops;
   atomic_uint32_t _fragments;
-  message_t* _camkes_buf;
+  message_t* proxy_buffer[MAX_OUTPUT_NUM];
+  eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 
   void fragment(Packet *);
   int optcopy(const click_ip *ip1, click_ip *ip2);

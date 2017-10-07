@@ -19,7 +19,11 @@ component aq_broadcast {
     RUMPRUN_COMPONENT_DEFINITION()
     uses PCIConfig pci_config;
     control;
+    consumes SomethingHappenedEvent ev;
     dataport message_t aqb_sendbuffer;
     dataport message_t aqb_recvbuffer;
+    emits SomethingHappenedEvent ev2ether0;
+    emits SomethingHappenedEvent ev2ether1;
+    emits SomethingHappenedEvent ev2ether2;
 
 }

@@ -37,11 +37,15 @@ extern "C" {
     void* arpres_sendbuffer; 
     void* arpres_recvbuffer;
     const char * proxy_arp[NUM_COMPONENT-1];
+    void ev_wait(void);
+    void ev2ether_emit(void);
 }
 
 #pragma weak arpres_sendbuffer
 #pragma weak arpres_recvbuffer
 #pragma weak proxy_arp
+#pragma weak ev_wait
+#pragma weak ev2ether_emit
 
 void setup_arpRes(Camkes_ARPResponder &arpRes,FileErrorHandler &feh);
 void inline debugging(const char* s,int val){
@@ -80,7 +84,7 @@ int main(int argc, char *argv[]) {
     
     /* Wait for event */ 
     //A function detects if a pakcet is injected in the corresponding buffer
-    Camkes_config::start_proxy(cp,1);   
+    Camkes_config::start_proxy(cp,1,ev_wait);   
 
     return 0;
 }
@@ -97,5 +101,6 @@ void setup_arpRes(Camkes_ARPResponder &arpRes,FileErrorHandler &feh){
     debugging("finish configuration for arpResponder",re);
     Camkes_config::initialize_ports(&arpRes,pin_v,pout_v); //one input three output
     message_t* proxy_buffer[1] = {(message_t*)arpres_sendbuffer};
-    arpRes.setup_proxy(proxy_buffer,1);
+    eventfunc_t ev[1] = {ev2ether_emit};
+    arpRes.setup_proxy(proxy_buffer,ev,1);
 }

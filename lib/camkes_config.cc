@@ -32,8 +32,11 @@ void Camkes_config::initialize(Element* tar, ErrorHandler * eh){
 
 
 
-void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num){
+void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num,eventfunc_t wait_endpoint){
     while (true){
+        if (wait_endpoint){
+            wait_endpoint();
+        }
         _timerset.run_timers();
         for (int i = 0; i < num; i++){
             cp[i].push();
@@ -41,19 +44,23 @@ void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num){
     }
 }
 
-void Camkes_config::start_proxy(Camkes_proxy *cp,int num){
+void Camkes_config::start_proxy(Camkes_proxy *cp,int num,eventfunc_t wait_endpoint){
     while (true){
+        if (wait_endpoint){
+            wait_endpoint();
+        }
         _timerset.run_timers();
-
         for (int i = 0; i < num; i++){
             cp[i].push();
         }
     }
 }
 
-
-void Camkes_config::start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy * cp,int num){
+void Camkes_config::start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy * cp,int num,eventfunc_t wait_endpoint){
     while (true){
+        if (wait_endpoint){
+            wait_endpoint();
+        }
         for (int i = 0 ; i < num ;i++){
             cp[i].push();
         }
@@ -65,6 +72,7 @@ void Camkes_config::start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy
 
 //Mashalling
 int Camkes_config::packet_serialize(Packet * dst,Packet *src){
+    
     memcpy(dst,src,sizeof(Packet));
     dst->_head = reinterpret_cast<unsigned char*>(dst) + sizeof(Packet);
     //I made the shared memory buffer the size of 4096 - sizeof(int) - sizeof(Packet). It should still be far greater than any buffer_length() whose max value normally may just be 2048
@@ -78,19 +86,16 @@ int Camkes_config::packet_serialize(Packet * dst,Packet *src){
     
     if (src->mac_header())
         dst->set_mac_header(dst->data() + src->mac_header_offset() );
-    
-    //if !has_transport_header() network_header_length is not valid
     if (src->network_header() && src->has_transport_header())
         dst->set_network_header(dst->data() + src->network_header_offset(), src->network_header_length()); 
-
 }
-
 
 
 
 //vtable realted. Be careful.Demarshalling 
 void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     Packet * p = reinterpret_cast<Packet*>(src);  
+
     int headroom = p->headroom();
     int length = p->length();
     int nh_offset = p->network_header_offset();
@@ -120,6 +125,7 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     //        std::cout << ".";
     //}
     //std::cout << std::endl;
+    
 }
 
 void Camkes_config::recycle(Packet * p){
@@ -146,13 +152,10 @@ Camkes_proxy_m::Camkes_proxy_m(Element * elemm, Camkes_proxy_m::buf_func_t func 
 void Camkes_proxy_m::push(){
     for (int i = 0; i < nclient; i++){
         if (((message_t*)func(i))->ready){
-
             Packet * p;
             Camkes_config::deserialize_packet(p,(void*)(&(((message_t*)func(i))->content)));
-            
             ((message_t*)func(i))->ready = 0;
             elem->push(port,p);
-            
         }
     }
 }

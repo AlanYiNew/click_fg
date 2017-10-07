@@ -21,5 +21,7 @@ component com_arpresponder {
     control;
     dataport message_t arpres_sendbuffer;
     dataport message_t arpres_recvbuffer;
+    consumes SomethingHappenedEvent ev;
+    emits SomethingHappenedEvent ev2ether;
     attribute string proxy_arp[];
 }

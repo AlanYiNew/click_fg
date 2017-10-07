@@ -40,6 +40,8 @@ extern "C" {
     void* icmpbp_buffer;
     void* icmprd_buffer;
     const char* ip_addr;
+    void ev2routing_emit(void);
+    void ev_wait(void);
 }
 
 #pragma weak icmp_buffer
@@ -48,6 +50,8 @@ extern "C" {
 #pragma weak icmpbp_buffer
 #pragma weak icmprd_buffer
 #pragma weak ip_addr
+#pragma weak ev2routing_emit
+#pragma weak ev_wait
 
 void inline debugging(const char* s,int val){
     std::cout << "###### " << std::left <<std::setw(40) << s << ": " << val << " #####" << std::endl;
@@ -75,13 +79,13 @@ int main(int argc, char *argv[]) {
 
 
     //ICMPError redirect
-    Camkes_ICMPError cicmprd((message_t*)icmp_buffer);
+    Camkes_ICMPError cicmprd;
     //ICMPError parameter problem
-    Camkes_ICMPError cicmpbp((message_t*)icmp_buffer);
+    Camkes_ICMPError cicmpbp;
     //ICMPError ttl 
-    Camkes_ICMPError cicmpttl((message_t*)icmp_buffer);
+    Camkes_ICMPError cicmpttl;
     //ICMPError must flag 
-    Camkes_ICMPError cicmpmf((message_t*)icmp_buffer);    
+    Camkes_ICMPError cicmpmf;    
     Camkes_proxy cp[4] = {
         {&cicmprd,(message_t*)icmprd_buffer},
         {&cicmpbp,(message_t*)icmpbp_buffer},
@@ -102,11 +106,10 @@ int main(int argc, char *argv[]) {
 
 
     //A function detects if a pakcet is injected in the corresponding buffer
-    Camkes_config::start_proxy(cp,4);   
+    Camkes_config::start_proxy(cp,4,ev_wait);   
 
     return 0;
 }
-
 
 
 void setup_cicmpbp(Camkes_ICMPError& icmpbp,FileErrorHandler &feh ){
@@ -119,6 +122,12 @@ void setup_cicmpbp(Camkes_ICMPError& icmpbp,FileErrorHandler &feh ){
     re = icmpbp.configure(icmpbp_config,&feh);
     debugging("finishing configuration for icmpbp",re);
     Camkes_config::initialize_ports(&icmpbp,pin_v,pout_v);
+
+    message_t* buffer[1] = {(message_t*)icmp_buffer};
+    eventfunc_t ev[1] = {ev2routing_emit};
+    
+    icmpbp.setup_proxy(buffer,ev,1);
+
 }
 
 void setup_cicmprd(Camkes_ICMPError& icmprd,FileErrorHandler &feh ){
@@ -132,6 +141,10 @@ void setup_cicmprd(Camkes_ICMPError& icmprd,FileErrorHandler &feh ){
     re = icmprd.configure(icmprd_config,&feh);
     debugging("finishing configuration for icmprd",re);
     Camkes_config::initialize_ports(&icmprd,pin_v,pout_v);
+    message_t* buffer[1] = {(message_t*)icmp_buffer};
+    eventfunc_t ev[1] = {ev2routing_emit};
+    
+    icmprd.setup_proxy(buffer,ev,1);
 }
 
 void setup_cicmpttl(Camkes_ICMPError& icmpttl,FileErrorHandler &feh ){
@@ -144,6 +157,11 @@ void setup_cicmpttl(Camkes_ICMPError& icmpttl,FileErrorHandler &feh ){
     re = icmpttl.configure(icmpttl_config,&feh);
     debugging("finishing configuration for icmpttl",re);
     Camkes_config::initialize_ports(&icmpttl,pin_v,pout_v);
+    message_t* buffer[1] = {(message_t*)icmp_buffer};
+    eventfunc_t ev[1] = {ev2routing_emit};
+    
+    icmpttl.setup_proxy(buffer,ev,1);
+
 }
 
 void setup_cicmpmf(Camkes_ICMPError& icmpmf,FileErrorHandler &feh ){
@@ -157,4 +175,9 @@ void setup_cicmpmf(Camkes_ICMPError& icmpmf,FileErrorHandler &feh ){
     re = icmpmf.configure(icmpmf_config,&feh);
     debugging("finishing configuration for icmpmf",re);
     Camkes_config::initialize_ports(&icmpmf,pin_v,pout_v);
+    message_t* buffer[1] = {(message_t*)icmp_buffer};
+    eventfunc_t ev[1] = {ev2routing_emit};
+    
+    icmpmf.setup_proxy(buffer,ev,1);
+
 }

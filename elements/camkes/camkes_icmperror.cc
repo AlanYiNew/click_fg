@@ -35,10 +35,7 @@ Camkes_ICMPError::Camkes_ICMPError()
 {
 }
 
-Camkes_ICMPError::Camkes_ICMPError(message_t * m)
-  : _type(-1), _code(-1),_camkes_buf(m)
-{
-}
+
 
 Camkes_ICMPError::~Camkes_ICMPError()
 {
@@ -324,15 +321,29 @@ Camkes_ICMPError::push(int port, Packet *p)
     p = simple_action(p);   
 
     if (p != NULL){
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        while (((volatile message_t*)_camkes_buf)->ready);
-        
-        Camkes_config::packet_serialize(dst,p);      
-        _camkes_buf->ready = 1;
-        p->kill(); 
+        if (proxy_buffer[port] == NULL){
+            checked_output_push(port, p);
+        }    else{
+            Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[port]->content));
+            if (((volatile message_t*)proxy_buffer[port])->ready){
+                p->kill();
+                return;
+            }
+            Camkes_config::packet_serialize(dst,p); 
+            proxy_buffer[port]->ready = 1;
+            proxy_event[port]();
+            p->kill();
+        } 
     }
 }
 
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_ICMPError::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
+}
 
 CLICK_ENDDECLS
 EXPORT_ELEMENT(Camkes_ICMPError)

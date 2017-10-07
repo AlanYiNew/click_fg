@@ -47,8 +47,8 @@ class Camkes_config{
 
         static void initialize(Element* tar, ErrorHandler * eh);
 
-        static void start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy * cp,int num);
 
+        static void start_pcap_dispatch(Element* recv,Element* send,Camkes_proxy * cp,int num,eventfunc_t wait_endpoint = NULL);
         //Mashalling
         static int packet_serialize(Packet * dst,Packet *src);
 
@@ -57,9 +57,9 @@ class Camkes_config{
 
         static void recycle(Packet * p);
 
-        static void  start_proxy(Camkes_proxy_m * camkes_buf,int n);
+        static void start_proxy(Camkes_proxy_m *cp,int num,eventfunc_t wait_endpoint = NULL);
 
-        static void  start_proxy(Camkes_proxy * camkes_buf,int n);
+        static void start_proxy(Camkes_proxy *cp,int num,eventfunc_t wait_endpoint = NULL);
 };
 
 

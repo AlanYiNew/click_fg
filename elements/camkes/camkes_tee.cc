@@ -26,8 +26,12 @@ Camkes_Tee::Camkes_Tee()
 {
 }
 
-Camkes_Tee::Camkes_Tee(message_t ** _camkes_buf){
-    this->_camkes_buf = _camkes_buf;
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_Tee::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
 }
 
 int
@@ -45,16 +49,19 @@ void
 Camkes_Tee::push(int, Packet *p)
 {
   int n = noutputs();
- 
-  for (int i = 0; i < n; i++){
-        //camkes proxy
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf[i]->content));
-        if (((volatile message_t*)_camkes_buf[i])->ready){
-            p->kill();
-            return;
-        }
-        Camkes_config::packet_serialize(dst,p);
-        _camkes_buf[i]->ready = 1;
+  for (int port = 0; port < n; ++port){
+      if (proxy_buffer[port] == NULL){
+          checked_output_push(port, p);
+      }    else{
+          Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[port]->content));
+          if (((volatile message_t*)proxy_buffer[port])->ready){
+              p->kill();
+              return;
+          }
+          Camkes_config::packet_serialize(dst,p); 
+          proxy_buffer[port]->ready = 1;
+          proxy_event[port]();
+      }
   }
   p->kill();
 }

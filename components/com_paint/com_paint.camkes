@@ -21,5 +21,8 @@ component com_paint {
     control;
     dataport message_t paint_sendbuffer;
     dataport message_t paint_recvbuffer;
+    consumes SomethingHappenedEvent ev;
+    emits SomethingHappenedEvent ev2routing;
     attribute string camkes_id_attributes;
+
 }

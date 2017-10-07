@@ -32,12 +32,15 @@ class Camkes_Tee : public Element {
   const char *class_name() const		{ return "Camkes_Tee"; }
   const char *port_count() const		{ return "1/1-"; }
   const char *processing() const		{ return PUSH; }
-  Camkes_Tee(message_t ** _camkes_buf);
+  
+  int setup_proxy(message_t** buffers,eventfunc_t* ev,int );
   int configure(Vector<String> &, ErrorHandler *) CLICK_COLD;
 
   void push(int, Packet *);
  private:
-    message_t ** _camkes_buf;
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
+
 };
 
 class PullCamkes_Tee : public Element {

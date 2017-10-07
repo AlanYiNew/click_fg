@@ -71,12 +71,14 @@
 /* XXX: CAmkES symbols that are linked in after this file is compiled.
    They need to be marked as weak and this is the current hacky way it is done */
 extern "C" {
+    const char * camkes_id_attributes;
+    const char * ip_addr;
+    const char * mac;
+    const char * wm_val; 
     void *paint_sendbuffer;
-    void camkes_ev_emit(void); 
-    void camkes_ev1_wait(void);
+    void ev_wait(void);
     void *aq_sendbuffer;
     void *aq_recvbuffer;
-    const char * wm_val;
     void *db_buffer;
     void *icmprd_buffer;
     void *icmpbp_buffer;
@@ -84,15 +86,16 @@ extern "C" {
     void *icmpmf_buffer;
     void *arpres_recvbuffer;
     void *arpres_sendbuffer;
-    const char * camkes_id_attributes;
-    const char * ip_addr;
-    const char * mac;
+    void ev2aq_emit(void); 
+    void ev2arpres_emit(void);
+    void ev2paint_emit(void);
+    void ev2icmp_emit(void);
 }
 
 #pragma weak wm_val
 #pragma weak paint_sendbuffer
-#pragma weak camkes_ev_emit
-#pragma weak camkes_ev1_wait
+#pragma weak ev2paint_emit
+#pragma weak ev_wait
 #pragma weak strip_push_port
 #pragma weak db_buffer
 #pragma weak camkes_id_attributes
@@ -106,6 +109,9 @@ extern "C" {
 #pragma weak aq_recvbuffer
 #pragma weak arpres_recvbuffer
 #pragma weak arpres_sendbuffer
+#pragma weak ev2aq_emit
+#pragma weak ev2arpres_emit
+#pragma weak ev2icmp_emit
 
 extern void click_export_elements();
 
@@ -114,17 +120,17 @@ const int pout_v[1] = {1};//output direction
 
 const int pin_v2[2] = {1,1};
 const int pout_v2[2] = {1,1};
-void setup_cpaintTee(Camkes_PaintTee& paintTee,FileErrorHandler &feh );
-void setup_cipgwoptions(Camkes_IPGWOptions & ipgwoptions,FileErrorHandler &feh);
-void setup_cclsf(Camkes_Classifier &clsf,FileErrorHandler &feh);
-void setup_tDev(ToDevice & tDev,FromDevice & fDev, FileErrorHandler & feh);
-void setup_fDev(FromDevice & fDev, FileErrorHandler & feh);
-void setup_queue(SimpleQueue& queue,FileErrorHandler &feh);
-void setup_fips(FixIPSrc& fips,FileErrorHandler &feh);
+void setup_cipgwoptions(Camkes_IPGWOptions &ipgwoptions, FileErrorHandler &feh);
+void setup_tDev(ToDevice & tDev,FromDevice &fDev, FileErrorHandler & feh);
+void setup_cpaintTee(Camkes_PaintTee &paintTee, FileErrorHandler &feh);
 void setup_cdipttl(Camkes_DecIPTTL &dipttl, FileErrorHandler &feh);
-void setup_cipf(Camkes_IPFragmenter& ipf,FileErrorHandler &feh );
-void setup_arpQue(ARPQuerier& arpQue,FileErrorHandler &feh );
-void setup_db(DropBroadcasts& db, FileErrorHandler &feh);
+void setup_cclsf(Camkes_Classifier &clsf, FileErrorHandler &feh);
+void setup_cipf(Camkes_IPFragmenter &ipf, FileErrorHandler &feh);
+void setup_arpQue(ARPQuerier &arpQue, FileErrorHandler &feh);
+void setup_queue(SimpleQueue &queue, FileErrorHandler &feh);
+void setup_fDev(FromDevice &fDev, FileErrorHandler & feh);
+void setup_db(DropBroadcasts &db, FileErrorHandler &feh);
+void setup_fips(FixIPSrc &fips, FileErrorHandler &feh);
 void inline debugging(const char* s,int val){
      std::cout << "###### " << std::left <<std::setw(40) << s << ": " << val << " #####" << std::endl;
 }
@@ -133,17 +139,6 @@ void inline debugging(const char* s,int val){
 int main (int argc, char *argv[]) {
 
     message_t * buffer_str = (message_t*)paint_sendbuffer;
-
-
-    //snprintf(buffer_str->content, PACKET_MAX_LEN, "Hello, World!");
-    //printf("Sending string: %s\n", buffer_str->content);
-    /* Signal the string reverse server and wait for response */
-    //buffer_str->ready = 1;
-    //camkes_ev_emit();
-
-    //camkes_ev1_wait();
-
-    //printf("%s\n", buffer_str);
 
     char errbuf[PCAP_ERRBUF_SIZE]; 
 
@@ -222,16 +217,16 @@ int main (int argc, char *argv[]) {
     //DropBroadCasts
     DropBroadcasts db;
     //CheckPaint
-    Camkes_PaintTee cpaintTee((message_t*)icmprd_buffer);
+    Camkes_PaintTee cpaintTee;
      
     //IPGWOptions
-    Camkes_IPGWOptions cipgwoptions((message_t*)icmpbp_buffer);
+    Camkes_IPGWOptions cipgwoptions;
     //IPFixSrc
     FixIPSrc fips;
     //DecIPTTL
-    Camkes_DecIPTTL cdipttl((message_t*)icmpttl_buffer);
+    Camkes_DecIPTTL cdipttl;
     //IPFragmenter
-    Camkes_IPFragmenter cipf((message_t*)icmpmf_buffer);
+    Camkes_IPFragmenter cipf;
     //ARPQuerier
     ARPQuerier arpQue;
 
@@ -318,7 +313,10 @@ void setup_cpaintTee(Camkes_PaintTee& paintTee,FileErrorHandler &feh ){
     re = paintTee.configure(paintTee_config,&feh);
     debugging("finishing configuration for paintTee",re);
     Camkes_config::initialize_ports(&paintTee,pin_v,pout_v2);
-
+    
+    message_t * proxy_buffer[1] = {(message_t*)icmprd_buffer};
+    eventfunc_t ev[1] = {ev2icmp_emit};
+    paintTee.setup_proxy(proxy_buffer,ev,1);
 }
 
 void setup_cipgwoptions(Camkes_IPGWOptions & ipgwoptions,FileErrorHandler &feh){
@@ -330,6 +328,9 @@ void setup_cipgwoptions(Camkes_IPGWOptions & ipgwoptions,FileErrorHandler &feh){
     re = ipgwoptions.configure(ipgwoptions_config,&feh);
     debugging("finishing configuration for ipgwoptions",re);
     Camkes_config::initialize_ports(&ipgwoptions,pin_v,pout_v);
+    message_t * proxy_buffer[1] = {(message_t*)icmpbp_buffer};
+    eventfunc_t ev[1] = {ev2icmp_emit};
+    ipgwoptions.setup_proxy(proxy_buffer,ev,1);
 }
 
 
@@ -351,7 +352,8 @@ void setup_cclsf(Camkes_Classifier &clsf,FileErrorHandler &feh){
                                  (message_t*)aq_sendbuffer,
                                  (message_t*)paint_sendbuffer,
                                  NULL};
-    clsf.setup_proxy(proxy_buffer,4);
+    eventfunc_t ev[4] = {ev2arpres_emit,ev2aq_emit,ev2paint_emit,NULL};
+    clsf.setup_proxy(proxy_buffer,ev,4);
     Camkes_config::initialize_ports(&clsf,clsf_in_v,clsf_out_v); //one input four output
 }
 
@@ -420,6 +422,10 @@ void setup_cdipttl(Camkes_DecIPTTL &dipttl, FileErrorHandler &feh){
     //Camkes_config::connect_port(&tDev,true,0,&clsf,0);
     debugging("attempting to initialize dipttl",re);
     Camkes_config::initialize(&dipttl,&feh);
+    message_t * proxy_buffer[1] = {(message_t*)icmpttl_buffer};
+    eventfunc_t ev[1] = {ev2icmp_emit};
+    dipttl.setup_proxy(proxy_buffer,ev,1);
+
 }
 
 void setup_cipf(Camkes_IPFragmenter& ipf,FileErrorHandler &feh ){
@@ -430,6 +436,9 @@ void setup_cipf(Camkes_IPFragmenter& ipf,FileErrorHandler &feh ){
     re = ipf.configure(ipf_config,&feh); 
     debugging("finish configuration for ipf",re);
     Camkes_config::initialize_ports(&ipf,pin_v,pout_v); //one input three output
+    message_t * proxy_buffer[1] = {(message_t*)icmpmf_buffer};
+    eventfunc_t ev[1] = {ev2icmp_emit};
+    ipf.setup_proxy(proxy_buffer,ev,1);
 }
 
 void setup_arpQue(ARPQuerier& arpQue,FileErrorHandler &feh ){

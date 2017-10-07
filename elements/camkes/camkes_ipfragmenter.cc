@@ -33,12 +33,7 @@ Camkes_IPFragmenter::Camkes_IPFragmenter()
     _drops = 0;
 }
 
-Camkes_IPFragmenter::Camkes_IPFragmenter(message_t* buf)
-    : _honor_df(true), _verbose(false), _mtu(0), _camkes_buf(buf)
-{
-    _fragments = 0;
-    _drops = 0;
-}
+
 
 
 Camkes_IPFragmenter::~Camkes_IPFragmenter()
@@ -110,13 +105,14 @@ Camkes_IPFragmenter::fragment(Packet *p_in)
 	    click_chatter("Camkes_IPFragmenter(%d) DF %p{ip_ptr} %p{ip_ptr} len=%d", _mtu, &ip_in->ip_src, &ip_in->ip_dst, p_in->length());
 	_drops++;
     //camkes proxy
-    Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-    if (((volatile message_t*)_camkes_buf)->ready){
+    Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[1]->content));
+    if (((volatile message_t*)proxy_buffer[1])->ready){
         p_in->kill();
         return;
     }
     Camkes_config::packet_serialize(dst,p_in); 
-    _camkes_buf->ready = 1;
+    proxy_buffer[1]->ready = 1;
+    proxy_event[1]();
     p_in->kill();
 
 	return;
@@ -199,6 +195,13 @@ Camkes_IPFragmenter::add_handlers()
     add_data_handlers("fragments", Handler::OP_READ, &_fragments);
 }
 
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_IPFragmenter::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
+}
 CLICK_ENDDECLS
 EXPORT_ELEMENT(Camkes_IPFragmenter)
 ELEMENT_MT_SAFE(Camkes_IPFragmenter)

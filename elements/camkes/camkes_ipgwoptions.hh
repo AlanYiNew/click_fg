@@ -51,12 +51,14 @@ class Camkes_IPGWOptions : public Element { public:
   Packet *handle_options(Packet *);
   Packet *simple_action(Packet *);
 
+  int setup_proxy(message_t** buffers,eventfunc_t* notify,int num);
  private:
 
   atomic_uint32_t _drops;
   struct in_addr _preferred_addr;
   Vector<IPAddress> _my_addrs;
-  message_t * _camkes_buf;
+  message_t* proxy_buffer[MAX_OUTPUT_NUM];
+  eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

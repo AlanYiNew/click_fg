@@ -92,7 +92,7 @@ class Camkes_ARPResponder : public Element { public:
 
     void push(int port, Packet *p);
 
-    int setup_proxy(message_t** buffers,int num);
+    int setup_proxy(message_t** buffers,eventfunc_t *,int num);
     static Packet *make_response(const uint8_t target_eth[6],
 				 const uint8_t target_ip[4],
 				 const uint8_t src_eth[6],
@@ -133,6 +133,7 @@ class Camkes_ARPResponder : public Element { public:
     static int add_handler(const String &s, Element *e, void *, ErrorHandler *errh);
     static int remove_handler(const String &s, Element *e, void *, ErrorHandler *errh);
     message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

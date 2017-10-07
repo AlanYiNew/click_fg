@@ -272,9 +272,10 @@ Camkes_ARPResponder::add_handlers()
 }
 
 //proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
-int Camkes_ARPResponder::setup_proxy(message_t** buffers,int num){
+int Camkes_ARPResponder::setup_proxy(message_t** buffers,eventfunc_t *ev,int num){
     for (int i = 0 ; i < num; ++i){
         proxy_buffer[i] = buffers[i]; 
+        proxy_event[i] = ev[i];
     }   
 }
 
@@ -291,6 +292,7 @@ void Camkes_ARPResponder::push(int port, Packet *p)
         std::cout << "arp responder push" << std::endl;
         Camkes_config::packet_serialize(dst,p); 
         proxy_buffer[port]->ready = 1;
+        proxy_event[port]();
         p->kill();
 
     }

@@ -107,7 +107,6 @@ class Camkes_ICMPError : public Element { public:
 
     Camkes_ICMPError() CLICK_COLD;
     ~Camkes_ICMPError() CLICK_COLD;
-    Camkes_ICMPError(message_t* m);
 
     const char *class_name() const		{ return "ICMPError"; }
     const char *port_count() const		{ return PORTS_1_1; }
@@ -117,12 +116,11 @@ class Camkes_ICMPError : public Element { public:
     void add_handlers() CLICK_COLD;
     void push(int port, Packet *p);
 
-
+    int setup_proxy(message_t**,eventfunc_t*,int);
     Packet *simple_action(Packet *);
 
   private:
 
-    message_t * _camkes_buf;
     IPAddress _src_ip;
     int _type;
     int _code;
@@ -135,7 +133,8 @@ class Camkes_ICMPError : public Element { public:
     bool unicast(struct in_addr) const;
     bool valid_source(struct in_addr) const;
     static const uint8_t *valid_source_route(const click_ip *ip);
-
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

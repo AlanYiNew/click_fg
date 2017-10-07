@@ -30,11 +30,7 @@ Camkes_DecIPTTL::Camkes_DecIPTTL()
     _drops = 0;
 }
 
-Camkes_DecIPTTL::Camkes_DecIPTTL(message_t * buf)
-    : _active(true), _multicast(true),_camkes_buf(buf)
-{
-    _drops = 0;
-}
+
 
 Camkes_DecIPTTL::~Camkes_DecIPTTL()
 {
@@ -63,13 +59,14 @@ Camkes_DecIPTTL::simple_action(Packet *p)
     if (ip_in->ip_ttl <= 1) {
         ++_drops;
         //camkes proxy
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf->content));
-        if (((volatile message_t*)_camkes_buf)->ready){
+        Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[1]->content));
+        if (((volatile message_t*)proxy_buffer[1])->ready){
             p->kill();
             return 0;
         }
         Camkes_config::packet_serialize(dst,p); 
-        _camkes_buf->ready = 1;
+        proxy_buffer[1]->ready = 1;
+        proxy_event[1]();
         p->kill();
         return 0;
     } else {
@@ -98,6 +95,14 @@ Camkes_DecIPTTL::add_handlers()
 {
     add_data_handlers("drops", Handler::OP_READ, &_drops);
     add_data_handlers("active", Handler::OP_READ | Handler::OP_WRITE | Handler::CHECKBOX, &_active);
+}
+
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_DecIPTTL::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
 }
 
 CLICK_ENDDECLS

@@ -43,11 +43,14 @@ class Camkes_PaintTee : public Element { public:
 
     Packet *simple_action(Packet *);
 
+    int setup_proxy(message_t** buffers,eventfunc_t* notify,int num);
   private:
     message_t* _camkes_buf;
     uint8_t _anno;
     uint8_t _color;
 
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

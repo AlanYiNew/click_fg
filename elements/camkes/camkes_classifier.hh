@@ -93,7 +93,7 @@ class Camkes_Classifier : public Element { public:
     static void parse_program(Classification::Wordwise::Program &prog,
 			      Vector<String> &conf, ErrorHandler *errh);
 
-    int setup_proxy(message_t** buffers,int );
+    int setup_proxy(message_t** buffers,eventfunc_t* ev,int );
 
   protected:
 
@@ -104,6 +104,7 @@ class Camkes_Classifier : public Element { public:
 
   private:
     message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 
