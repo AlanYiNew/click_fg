@@ -105,6 +105,7 @@ int main(int argc, char *argv[]) {
     setup_cicmpbp(cicmpbp,feh);
 
 
+    std::cout << "ev_wait" << (unsigned long*)ev_wait << std::endl;
     //A function detects if a pakcet is injected in the corresponding buffer
     Camkes_config::start_proxy(cp,4,ev_wait);   
 

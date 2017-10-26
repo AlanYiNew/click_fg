@@ -79,11 +79,10 @@ int main(int argc, char *argv[]) {
         {&cpaint,(message_t*)paint_recvbuffer}
     };
 
-    while(true) {
-        /* Wait for event */ 
-        //A function detects if a pakcet is injected in the corresponding buffer
-        Camkes_config::start_proxy(cp,1,ev_wait);   
-    }
+    std::cout << "ev_wait" << (unsigned long*)ev_wait << std::endl;
+    /* Wait for event */ 
+    //A function detects if a pakcet is injected in the corresponding buffer
+    Camkes_config::start_proxy(cp,1,ev_wait);   
 
     return 0;
 }

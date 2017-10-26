@@ -49,10 +49,15 @@ Camkes_PaintTee::simple_action(Packet *p)
     if (p->anno_u8(_anno) == _color){ 
         //camkes proxy
         Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[1]->content));
-        while (((volatile message_t*)proxy_buffer[1])->ready);
-        Camkes_config::packet_serialize(dst,p); 
-        _camkes_buf->ready = 1;
-        proxy_event[1]();
+        if (((volatile message_t*)proxy_buffer[1])->ready){
+            return (p);   
+        }
+        
+        int err = Camkes_config::packet_serialize(dst,p); 
+        if (!err){
+            _camkes_buf->ready = 1;
+            proxy_event[1]();
+        }
     }
     return(p);
 }

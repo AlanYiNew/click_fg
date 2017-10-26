@@ -135,9 +135,9 @@ assembly {
      connection seL4SharedData fromarpres2(from arpres2.arpres_sendbuffer, to rump_ether2.arpres_recvbuffer);
 
      //Notification
-     connection seL4MultiNotification evfrouting2ether0(from routing.ev1, to rump_ether0.ev); 
-     connection seL4MultiNotification evfrouting2ether1(from routing.ev2, to rump_ether1.ev);
-     connection seL4MultiNotification evfrouting2ether2(from routing.ev3, to rump_ether2.ev);
+     connection seL4MultiNotification evfrouting2ether0(from routing.ev2ether0, to rump_ether0.ev); 
+     connection seL4MultiNotification evfrouting2ether1(from routing.ev2ether1, to rump_ether1.ev);
+     connection seL4MultiNotification evfrouting2ether2(from routing.ev2ether2, to rump_ether2.ev);
 
      connection seL4MultiNotification evfether02aq(from rump_ether0.ev2aq, to aq.ev);
      connection seL4MultiNotification evfehter12aq(from rump_ether1.ev2aq, to aq.ev);
@@ -179,7 +179,7 @@ assembly {
                                 "wm_val" : "wm1",
                                 "addr" : "192.168.2.98",
                                 "mask" : "24",
-                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint", "camkes_ev1","wm_val","db_buffer","camkes_id_attributes","icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
+                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint","wm_val","db_buffer","camkes_id_attributes","icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
 
     rump_ether1.rump_config = { "rump_net": 2,
                                 "rumprunbake_config": "sel4_ethernet",
@@ -190,7 +190,7 @@ assembly {
                                 "wm_val" : "wm0",
                                 "addr" : "192.168.1.98",
                                 "mask" : "24",
-                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint", "camkes_ev1","wm_val","db_buffer","camkes_id_attributes",  "icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
+                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint","wm_val","db_buffer","camkes_id_attributes",  "icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
 
     rump_ether2.rump_config = { "rump_net": 2,
                                 "rumprunbake_config": "sel4_ethernet", 
@@ -201,12 +201,12 @@ assembly {
                                 "wm_val" : "wm2",
                                 "addr" : "192.168.3.98",
                                 "mask" : "24",
-                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint", "camkes_ev1","wm_val","db_buffer","camkes_id_attributes","icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
+                                "interfaces_to_expose": ["mac","ip_addr","paint_sendbuffer", "ev2paint","wm_val","db_buffer","camkes_id_attributes","icmprd_buffer","icmpttl_buffer","icmpbp_buffer","icmpmf_buffer","aq_sendbuffer","aq_recvbuffer","arpres_recvbuffer","arpres_sendbuffer","ev2paint","ev2aq","ev2arpres"] };
 
     routing.rump_config = {     "rump_net": 4,
                                 "rumprunbake_config": "sel4_generic", 
                                 "cmdline": "echo central routing",
-                                "interfaces_to_expose":["ev","ev1","ev2","paint_recvbuffer","ip_addr1","ip_addr2","rt","db_buffer","icmp_buffer"]};
+                                "interfaces_to_expose":["ev","ev2ether0","ev2ether1","ev2ether2","paint_recvbuffer","ip_addr1","ip_addr2","rt","db_buffer","icmp_buffer"]};
 
     aq.rump_config = { "rump_net": 4,
                   "rumprunbake_config": "sel4_generic", 

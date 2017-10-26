@@ -27,7 +27,6 @@
 #include <iostream>
 CLICK_DECLS
 
-Camkes_StaticIPLookup::Camkes_StaticIPLookup(message_t** _camkes_buf):Camkes_LinearIPLookup(_camkes_buf){};
 
 Camkes_StaticIPLookup::Camkes_StaticIPLookup()
 {

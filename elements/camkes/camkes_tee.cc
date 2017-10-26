@@ -58,9 +58,11 @@ Camkes_Tee::push(int, Packet *p)
               p->kill();
               return;
           }
-          Camkes_config::packet_serialize(dst,p); 
-          proxy_buffer[port]->ready = 1;
-          proxy_event[port]();
+          int err = Camkes_config::packet_serialize(dst,p); 
+          if (!err){
+            proxy_buffer[port]->ready = 1;
+            proxy_event[port]();
+          }
       }
   }
   p->kill();

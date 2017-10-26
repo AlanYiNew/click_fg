@@ -281,7 +281,7 @@ class Packet { public:
     inline int mac_header_offset() const;
     inline uint32_t mac_header_length() const;
     inline int mac_length() const;
-    inline void set_mac_header(const unsigned char *p);
+    inline void set_mac_header(const unsigned char *p); 
     inline void set_mac_header(const unsigned char *p, uint32_t len);
     inline void clear_mac_header();
 
@@ -290,7 +290,7 @@ class Packet { public:
     inline int network_header_offset() const;
     inline uint32_t network_header_length() const;
     inline int network_length() const;
-    inline void set_network_header(const unsigned char *p, uint32_t len);
+    inline void set_network_header(const unsigned char *p, uint32_t len); 
     inline void set_network_header_length(uint32_t len);
     inline void clear_network_header();
 
@@ -937,6 +937,7 @@ Packet::buffer() const
 #endif
 }
 
+
 /** @brief Return the packet's end data buffer pointer.
  *
  * The result points past the packet's tailroom.
@@ -954,6 +955,8 @@ Packet::end_buffer() const
     return _end;
 #endif
 }
+
+
 
 /** @brief Return the packet's length. */
 inline uint32_t
@@ -1125,7 +1128,7 @@ Packet::network_header() const
     return skb()->nh.raw;
 # endif
 #else
-    return _aa.nh;
+    return ((volatile AllAnno*)&_aa)->nh;
 #endif
 }
 
@@ -1758,12 +1761,14 @@ Packet::set_dst_ip_anno(IPAddress a)
     xanno()->u32[dst_ip_anno_offset / 4] = a.addr();
 }
 
+
+
 /** @brief Set the MAC header pointer.
  * @param p new header pointer */
 inline void
-Packet::set_mac_header(const unsigned char *p)
+Packet::set_mac_header(const unsigned char *p) 
 {
-    assert(p >= buffer() && p <= end_buffer());
+    assert(p >= this->buffer() && p <= this->end_buffer());
 #if CLICK_LINUXMODULE	/* Linux kernel module */
 # if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24)
     skb_set_mac_header(skb(), p - data());
@@ -1771,7 +1776,7 @@ Packet::set_mac_header(const unsigned char *p)
     skb()->mac.raw = const_cast<unsigned char *>(p);
 # endif
 #else				/* User-space and BSD kernel module */
-    _aa.mac = const_cast<unsigned char *>(p);
+    ((volatile AllAnno*) &_aa)->mac = const_cast<unsigned char *>(p);
 #endif
 }
 
@@ -1851,14 +1856,15 @@ Packet::push_mac_header(uint32_t len)
     return q;
 }
 
+
 /** @brief Set the network and transport header pointers.
  * @param p new network header pointer
  * @param len new network header length
  * @post network_header() == @a p and transport_header() == @a p + @a len */
 inline void
-Packet::set_network_header(const unsigned char *p, uint32_t len)
+Packet::set_network_header(const unsigned char *p, uint32_t len) 
 {
-    assert(p >= buffer() && p + len <= end_buffer());
+    assert(p >= this->buffer() && p + len <= this->end_buffer());
 #if CLICK_LINUXMODULE	/* Linux kernel module */
 # if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24)
     skb_set_network_header(skb(), p - data());
@@ -1868,8 +1874,8 @@ Packet::set_network_header(const unsigned char *p, uint32_t len)
     skb()->h.raw = const_cast<unsigned char *>(p) + len;
 # endif
 #else				/* User-space and BSD kernel module */
-    _aa.nh = const_cast<unsigned char *>(p);
-    _aa.h = const_cast<unsigned char *>(p) + len;
+    ((volatile AllAnno *)&_aa)->nh = const_cast<unsigned char *>(p);
+    ((volatile AllAnno *)&_aa)->h = const_cast<unsigned char *>(p) + len;
 #endif
 }
 

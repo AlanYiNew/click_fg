@@ -30,9 +30,7 @@ void Camkes_config::initialize(Element* tar, ErrorHandler * eh){
     tar->initialize(eh);
 }
 
-
-
-void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num,eventfunc_t wait_endpoint){
+void Camkes_config::start_proxy(Camkes_proxy *cp,int num,eventfunc_t wait_endpoint){
     while (true){
         if (wait_endpoint){
             wait_endpoint();
@@ -44,7 +42,7 @@ void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num,eventfunc_t wait_endp
     }
 }
 
-void Camkes_config::start_proxy(Camkes_proxy *cp,int num,eventfunc_t wait_endpoint){
+void Camkes_config::start_proxy(Camkes_proxy_m *cp,int num,eventfunc_t wait_endpoint){
     while (true){
         if (wait_endpoint){
             wait_endpoint();
@@ -85,15 +83,28 @@ int Camkes_config::packet_serialize(Packet * dst,Packet *src){
     dst->copy_annotations(src);
     
     if (src->mac_header())
-        dst->set_mac_header(dst->data() + src->mac_header_offset() );
-    if (src->network_header() && src->has_transport_header())
-        dst->set_network_header(dst->data() + src->network_header_offset(), src->network_header_length()); 
+        if (dst->data() + src->mac_header_offset() >= dst->buffer() && dst->data() +src->mac_header_offset() <= dst->end_buffer()){
+            dst->set_mac_header(dst->data() + src->mac_header_offset() );
+        }   else{
+            return -1;
+        }
+    if (src->network_header() && src->has_transport_header()){
+        if (dst->data() + src->network_header_offset() >= dst->buffer() &&
+            dst->data() + src->network_header_offset() + src->network_header_length() <= dst->end_buffer()){
+       
+            dst->set_network_header(dst->data() + src->network_header_offset(), src->network_header_length()); 
+        }   else {
+            return -1;
+        }
+    }  
+    //std::cout << dst->length() << " "<<(unsigned long*)dst->data() << std::endl;
+    return 0;
 }
 
 
 
 //vtable realted. Be careful.Demarshalling 
-void Camkes_config::deserialize_packet(Packet* &dst,void* src){
+int Camkes_config::deserialize_packet(Packet* &dst,void* src){
     Packet * p = reinterpret_cast<Packet*>(src);  
 
     int headroom = p->headroom();
@@ -110,13 +121,24 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     p->_data = p->_head + headroom;
     p->_tail = p->_data+ length; 
 
+    //std::cout << p->length() << " "<<(unsigned long*)p->data() << std::endl;
     dst = Packet::make(p->headroom(),p->data(),p->length(),p->tailroom()); 
     dst->copy_annotations(p);
      
-    if (p->mac_header())
-        dst->set_mac_header(dst->data() + mac_offset ); 
-    if (p->network_header() && hth)
-        dst->set_network_header(dst->data() + nh_offset, nh_length);
+    if (p->mac_header()){
+        if (dst->data() + mac_offset >= dst->buffer() && dst->data() + mac_offset <= dst->end_buffer()){
+            dst->set_mac_header(dst->data() + mac_offset );  
+        }   else{
+            return -1;
+        }
+    }
+    if (p->network_header() && hth){
+        if (dst->data()+nh_offset >= dst->buffer() && dst->data() + nh_offset+ nh_length <= dst->end_buffer()){
+            dst->set_network_header(dst->data() + nh_offset, nh_length);
+        }   else   {
+            return -1;
+        }
+    }
 
     //unsigned char *ipchar = ((unsigned char *)dst->data())+30; 
     //for (int i = 0 ; i < 4 ;++i){
@@ -125,7 +147,7 @@ void Camkes_config::deserialize_packet(Packet* &dst,void* src){
     //        std::cout << ".";
     //}
     //std::cout << std::endl;
-    
+    return 0; 
 }
 
 void Camkes_config::recycle(Packet * p){
@@ -136,9 +158,13 @@ Camkes_proxy::Camkes_proxy(Element * elemm, message_t * bufferr,int portt):elem(
 void Camkes_proxy::push(){
     if (((volatile message_t*)buffer)->ready){
         Packet * p;
-        Camkes_config::deserialize_packet(p,(void*)(&(buffer->content)));
-        buffer->ready = 0;
-        elem->push(port,p);
+        int err = Camkes_config::deserialize_packet(p,(void*)(&(buffer->content)));
+        ((volatile message_t*)buffer)->ready = 0;
+        if (!err){
+            elem->push(port,p);
+        }   else{
+            p->kill();
+        }
     }
 }
 
@@ -151,11 +177,15 @@ Camkes_proxy_m::Camkes_proxy_m(Element * elemm, Camkes_proxy_m::buf_func_t func 
 
 void Camkes_proxy_m::push(){
     for (int i = 0; i < nclient; i++){
-        if (((message_t*)func(i))->ready){
+        if (((volatile message_t*)func(i))->ready){
             Packet * p;
-            Camkes_config::deserialize_packet(p,(void*)(&(((message_t*)func(i))->content)));
-            ((message_t*)func(i))->ready = 0;
-            elem->push(port,p);
+            int err = Camkes_config::deserialize_packet(p,(void*)(&(((message_t*)func(i))->content)));
+            ((volatile message_t*)func(i))->ready = 0;
+            if (!err){
+                elem->push(port,p);
+            }   else{
+                p->kill();
+            }        
         }
     }
 }

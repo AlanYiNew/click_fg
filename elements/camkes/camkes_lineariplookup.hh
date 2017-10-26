@@ -83,10 +83,8 @@ SortedIPLookup, LinuxIPLookup, Camkes_IPRouteTable */
 class Camkes_LinearIPLookup : public IPRouteTable { public:
 
     Camkes_LinearIPLookup() CLICK_COLD;
-    Camkes_LinearIPLookup(message_t **);
     ~Camkes_LinearIPLookup() CLICK_COLD;
 
-    message_t ** _camkes_buf;
 
     const char *class_name() const	{ return "Camkes_LinearIPLookup"; }
     const char *port_count() const	{ return "1/-"; }
@@ -101,6 +99,8 @@ class Camkes_LinearIPLookup : public IPRouteTable { public:
     int lookup_route(IPAddress, IPAddress&) const;
     String dump_routes();
 
+
+    int setup_proxy(message_t** buffers,eventfunc_t* notify,int num);
     bool check() const;
 
   protected:
@@ -118,6 +118,9 @@ class Camkes_LinearIPLookup : public IPRouteTable { public:
 
     int lookup_entry(IPAddress) const;
 
+  private:
+    message_t* proxy_buffer[MAX_OUTPUT_NUM];
+    eventfunc_t proxy_event[MAX_OUTPUT_NUM];
 };
 
 CLICK_ENDDECLS

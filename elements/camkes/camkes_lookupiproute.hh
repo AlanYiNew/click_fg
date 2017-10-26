@@ -40,7 +40,6 @@ class Camkes_StaticIPLookup : public Camkes_LinearIPLookup { public:
     Camkes_StaticIPLookup() CLICK_COLD;
     ~Camkes_StaticIPLookup() CLICK_COLD;
 
-    Camkes_StaticIPLookup(message_t** _camkes_buf);
 
     const char *class_name() const	{ return "Camkes_StaticIPLookup"; }
     void add_handlers() CLICK_COLD;

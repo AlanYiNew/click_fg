@@ -181,9 +181,13 @@ Camkes_IPGWOptions::handle_options(Packet *p)
       p->kill();
       return 0;
   }
-  Camkes_config::packet_serialize(dst,p); 
-  proxy_buffer[1]->ready = 1;
-  proxy_event[1]();
+  
+  
+  int err=Camkes_config::packet_serialize(dst,p); 
+  if (!err){
+    proxy_buffer[1]->ready = 1;
+    proxy_event[1]();
+  }
   p->kill();
   return 0;
 }

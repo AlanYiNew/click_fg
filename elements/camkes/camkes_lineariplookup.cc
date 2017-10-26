@@ -35,8 +35,12 @@ Camkes_LinearIPLookup::~Camkes_LinearIPLookup()
 {
 }
 
-Camkes_LinearIPLookup::Camkes_LinearIPLookup(message_t ** _camkes_buf){
-    this->_camkes_buf = _camkes_buf;
+//proxy function to setup the proxy buffer, num must be same as that used for noutputs in set_nports
+int Camkes_LinearIPLookup::setup_proxy(message_t** buffers,eventfunc_t* notify,int num){
+    for (int i = 0 ; i < num; ++i){
+        proxy_buffer[i] = buffers[i];
+        proxy_event[i] = notify[i]; 
+    }   
 }
 
 int
@@ -258,16 +262,18 @@ Camkes_LinearIPLookup::push(int, Packet *p)
     const IPRoute &e = _t[ei];
     if (e.gw)
 	p->set_dst_ip_anno(e.gw); 
-    if (e.port != 0){
-        //camkes proxy
-        Packet* dst = reinterpret_cast<Packet*>(&(_camkes_buf[e.port]->content));
-        if (((volatile message_t*)_camkes_buf)->ready){
+    if (proxy_buffer[e.port]){
+        Packet* dst = reinterpret_cast<Packet*>(&(proxy_buffer[e.port]->content));
+        if (((volatile message_t*)proxy_buffer[e.port])->ready){
             p->kill();
             return;
         }
-        Camkes_config::packet_serialize(dst,p);
+        int err = Camkes_config::packet_serialize(dst,p); 
+        if (!err){
+            proxy_buffer[e.port]->ready = 1;
+            proxy_event[e.port]();
+        }
         p->kill();
-        _camkes_buf[e.port]->ready = 1;
     }   else{
         //this machine
         output(e.port).push(p);

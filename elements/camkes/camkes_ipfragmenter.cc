@@ -110,9 +110,11 @@ Camkes_IPFragmenter::fragment(Packet *p_in)
         p_in->kill();
         return;
     }
-    Camkes_config::packet_serialize(dst,p_in); 
-    proxy_buffer[1]->ready = 1;
-    proxy_event[1]();
+    int err = Camkes_config::packet_serialize(dst,p_in); 
+    if (!err){
+        proxy_buffer[1]->ready = 1;
+        proxy_event[1]();
+    }
     p_in->kill();
 
 	return;
@@ -181,7 +183,6 @@ Camkes_IPFragmenter::fragment(Packet *p_in)
 void
 Camkes_IPFragmenter::push(int, Packet *p)
 {
-
     if (p->network_length() <= (int) _mtu)
 	output(0).push(p);
     else

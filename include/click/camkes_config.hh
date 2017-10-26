@@ -53,7 +53,7 @@ class Camkes_config{
         static int packet_serialize(Packet * dst,Packet *src);
 
         //vtable realted. Be careful.Demarshalling 
-        static void deserialize_packet(Packet* &dst,void* src);
+        static int deserialize_packet(Packet* &dst,void* src);
 
         static void recycle(Packet * p);
 

@@ -60,10 +60,31 @@
 #include <net/if.h>
 #include <unistd.h>
 #include <cstring>
-
 #include <iostream>
+#include <math.h>
+#include <click/camkes_config.hh>
+#define BENCHMARK 1
+#define CAMKES_DEBUG 1
+
+#if CAMKES_DEBUG && BENCHMARK
+
+
+
+extern "C"{
+    #include <sel4/types.h>
+    #include <sel4/macros.h>
+    #include <sel4/arch/functions.h>    
+    #include <sel4/syscalls.h> 
+    #include <sel4/sel4_arch/syscalls.h>
+    #include <sel4/benchmark_utilisation_types.h>
+}
+
+
+#endif
 
 CLICK_DECLS
+
+
 
 FromDevice::FromDevice()
     :
@@ -79,6 +100,8 @@ FromDevice::FromDevice()
     _fd = -1;
 #endif
 }
+
+
 
 FromDevice::~FromDevice()
 {
@@ -100,6 +123,15 @@ struct sniff_ip {
     u_short ip_sum;     /* checksum */
     struct in_addr ip_src,ip_dst; /* source and dest address */
 };
+
+struct udphdr {
+     uint16_t uh_sport;
+     uint16_t uh_dport;
+     uint16_t uh_ulen;
+     uint16_t uh_sum;
+};
+
+
 
 int
 FromDevice::configure(Vector<String> &conf, ErrorHandler *errh)
@@ -213,7 +245,7 @@ FromDevice::open_packet_socket(String ifname, ErrorHandler *errh)
     sa.sll_ifindex = ifindex;
     res = bind(fd, (struct sockaddr *)&sa, sizeof(sa));
     if (res != 0) {
-	close(fd);
+
 	return errh->error("%s: bind: %s", ifname.c_str(), strerror(errno));
     }
 
@@ -504,16 +536,21 @@ FromDevice::emit_packet(WritablePacket *p, int extra_len, const Timestamp &ts)
 }
 #endif
 
+
+
 #if FROMDEVICE_ALLOW_PCAP || FROMDEVICE_ALLOW_NETMAP
 CLICK_ENDDECLS
 #if CAMKES_DEBUG
+double data[10];
+double accu = 0;
+int count = 0;
 void debugging_purpose(const u_char* packet,const struct pcap_pkthdr* header){
      struct ether_header *eth_header;
      eth_header = (struct ether_header *) packet;
-
-
      
      auto ip = (struct sniff_ip*)(packet+sizeof(struct ether_header));
+     
+     #if !BENCHMARK
      if (ip->ip_p == 1){
          printf("ICMP");
          
@@ -539,8 +576,44 @@ void debugging_purpose(const u_char* packet,const struct pcap_pkthdr* header){
      inet_ntoa(ip->ip_dst),
      ether_ntoa((const ether_addr*)(eth_header->ether_dhost)));
      printf("This packet has a length of %d \n",header->len);
-    printf("Ethernet address length is %d\n\n",ETHER_HDR_LEN);
+     printf("Ethernet address length is %d\n\n",ETHER_HDR_LEN);
+     #else
+        if (ip->ip_p == 17){
+            uint64_t *ipcbuffer = (uint64_t *) &(seL4_GetIPCBuffer()->msg[0]);
+            unsigned short iphdrlen = (ip->ip_vhl & 0x0F) << 2;
+            struct udphdr *udph = (struct udphdr*)((unsigned char*)ip + iphdrlen);
+            unsigned int* first_32_bit = (unsigned int*)((unsigned char*)ip + iphdrlen + sizeof(struct udphdr));
+            
+
+            if (*first_32_bit == 0x61616161){
+                std::cout << "bechmark starts" << std::endl;
+                seL4_BenchmarkResetThreadUtilisation(1);
+                seL4_BenchmarkResetLog();
+
+            }   else if (*first_32_bit == 0x7A7A7A7A){
+                seL4_BenchmarkFinalizeLog();
+                seL4_BenchmarkGetThreadUtilisation(1);//seL4_CapInitThreadTCB = 1
+                double percentage = ipcbuffer[BENCHMARK_TOTAL_UTILISATION]*1000/ipcbuffer[BENCHMARK_IDLE_UTILISATION];
+                percentage = 1 - 1000 / percentage;
+                data[count%10] = percentage; 
+                count++;
+                        
+                printf("percentage:%lf\n",percentage);
+                accu+=percentage;
+                if (count%10 ==0) {
+                    double avg = accu/10;
+                    double temp = 0;
+                    for (int i = 0 ; i < 10; ++ i){
+                        temp += (data[i]-avg)*(data[i]-avg);
+                    }
+                    accu = 0;   
+                    printf("average:%lf stddev:%lf\n===========\n",avg,sqrt(temp/10));
+                }       
+            }
+        }         
+     #endif
 }
+
 #endif
 
 extern "C" {
@@ -603,7 +676,7 @@ FromDevice::selected(int, int)
 #if UNDER_CAMKES
     if (_method == method_pcap) {
 	// Read and push() at most one burst of packets.
-    int r = pcap_dispatch(_pcap, _burst*100, FromDevice_get_packet, (u_char *) this);
+    int r = pcap_dispatch(_pcap, 1, FromDevice_get_packet, (u_char *) this);
     if (r > 0) {
 	    _count += r;
 	} else if (r < 0 && ++_pcap_complaints < 5)
